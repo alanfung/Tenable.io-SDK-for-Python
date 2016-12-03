@@ -1,0 +1,12 @@
+*.pyc
+
+# Nessus config
+nessus.ini
+
+# Test state / virtualenvs
+.cache
+.venv
+.venv3
+
+# IntelliJ / PyCharm IDE
+.idea/
