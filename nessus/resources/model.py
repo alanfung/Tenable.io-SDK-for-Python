@@ -1,5 +1,7 @@
 from json import loads
 
+from nessus.exceptions import NessusException
+
 
 class BaseModel(object):
 
@@ -103,3 +105,32 @@ class User(BaseModel):
         self.type = type
         self.login_fail_count = login_fail_count
         self.last_login_attempt = last_login_attempt
+
+
+class UserList(BaseModel):
+
+    def __init__(
+            self,
+            users=None,
+    ):
+        self._users = None
+        self.users = users
+
+    @property
+    def users(self):
+        return self._users
+        pass
+
+    @users.setter
+    def users(self, users):
+        if isinstance(users, list):
+            self._users = []
+            for user in users:
+                if isinstance(user, User):
+                    self._users.append(user)
+                elif isinstance(user, dict):
+                    self._users.append(User.from_dict(user))
+                else:
+                    raise NessusException(u'Invalid element type.')
+        else:
+            self._users = []

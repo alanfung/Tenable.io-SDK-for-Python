@@ -1,7 +1,7 @@
 import json
 
 from nessus.resources.base import BaseResource
-from nessus.resources.model import User
+from nessus.resources.model import User, UserList
 
 
 class UsersResource(BaseResource):
@@ -12,7 +12,7 @@ class UsersResource(BaseResource):
 
     def list(self):
         response = self._client.get('users')
-        return json.loads(response.text)
+        return UserList.from_json(response.text)
 
     def impersonate(self, user_id):
         response = self._client.post('users/%(user_id)/impersonate', path_params={'user_id': user_id})

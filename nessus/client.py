@@ -5,6 +5,7 @@ from os import environ
 from requests.utils import quote
 from time import sleep
 
+from nessus.exceptions import NessusException, NessusRetryableException
 from nessus.resources.asset_lists import AssetListsResource
 from nessus.resources.scans import ScansResource
 from nessus.resources.session import SessionResource
@@ -126,16 +127,3 @@ class NessusClient(object):
     # decorated by @staticmethod.
     _retry = staticmethod(_retry)
     _error_handler = staticmethod(_error_handler)
-
-
-class NessusException(Exception):
-
-    def __init__(self, response):
-        self.response = response
-
-    def __str__(self):
-        return self.response.text
-
-
-class NessusRetryableException(NessusException):
-    pass
