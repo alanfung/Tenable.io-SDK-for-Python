@@ -11,15 +11,13 @@ from nessus.client import NessusClient, NessusException, NessusRetryableExceptio
 
 class TestNessusClient(object):
 
-    def test_client_bad_keys(self):
-        with pytest.raises(NessusException):
-            NessusClient('bad', 'key').session.get()
-
     def test_client_retries(self):
 
+        # Function that throws NessusRetryableException
         mock_response = mock.Mock()
         foo = mock.Mock(side_effect=NessusRetryableException(mock_response))
 
+        # Function decoration
         retried_foo = NessusClient._retry(foo)
 
         with pytest.raises(NessusException):
@@ -37,8 +35,10 @@ class TestNessusClient(object):
             [{'status_code': 503}, True],
         ]
 
+        # Function that returns Responses with above status codes.
         foo = mock.Mock(side_effect=[mock.Mock(**response[0]) for response in responses])
 
+        # Method decoration
         foo = NessusClient._error_handler(foo)
 
         for (response, retry) in responses:
