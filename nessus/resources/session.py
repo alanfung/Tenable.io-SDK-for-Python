@@ -1,5 +1,5 @@
 from nessus.resources.base import BaseResource
-from nessus.resources.model import Session
+from nessus.resources.models import Session
 
 
 class SessionResource(BaseResource):

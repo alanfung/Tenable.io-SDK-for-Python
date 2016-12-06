@@ -1,5 +1,5 @@
 from nessus.client import NessusClient
-from nessus.resources.model import UserList
+from nessus.resources.models import UserList
 
 
 class TestUsersResource(object):

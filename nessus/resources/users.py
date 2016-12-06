@@ -1,7 +1,7 @@
 import json
 
 from nessus.resources.base import BaseResource
-from nessus.resources.model import User, UserList
+from nessus.resources.models import User, UserList
 
 
 class UsersResource(BaseResource):
