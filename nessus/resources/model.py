@@ -3,13 +3,16 @@ from json import loads
 
 class BaseModel(object):
 
-    def from_json(self, json):
-        return self.from_dict(loads(json))
+    @classmethod
+    def from_json(cls, json):
+        return cls.from_dict(loads(json))
 
-    def from_dict(self, dict):
+    @classmethod
+    def from_dict(cls, dict):
+        instance = cls()
         for key in dict:
-            setattr(self, key, dict[key])
-        return self
+            setattr(instance, key, dict[key])
+        return instance
 
     @classmethod
     def from_list(cls, list):
@@ -17,7 +20,7 @@ class BaseModel(object):
         if list:
             model_list = []
             for item in list:
-                model_list.append(cls().from_dict(item))
+                model_list.append(cls.from_dict(item))
         return model_list
 
     @classmethod

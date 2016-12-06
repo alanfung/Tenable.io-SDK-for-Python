@@ -8,7 +8,7 @@ class UsersResource(BaseResource):
 
     def get(self, user_id):
         response = self._client.get('users/%(user_id)s', {'user_id': user_id})
-        return User().from_json(response.text)
+        return User.from_json(response.text)
 
     def list(self):
         response = self._client.get('users')

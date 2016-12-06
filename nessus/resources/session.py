@@ -6,4 +6,4 @@ class SessionResource(BaseResource):
 
     def get(self):
         response = self._client.get('session')
-        return Session().from_json(response.text)
+        return Session.from_json(response.text)
