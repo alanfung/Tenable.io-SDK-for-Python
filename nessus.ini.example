@@ -8,3 +8,5 @@ secret_key=YOUR_SECRET_KEY
 scan_template_name=discovery
 ; Host target to create a scan with. (Warning: do not scan targets that you're not authorized to.)
 scan_text_targets=YOUR_SCAN_TARGET
+; The valid domain name for username
+users_domain_name=YOUR_DOMAIN
