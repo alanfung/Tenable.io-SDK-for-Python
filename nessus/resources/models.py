@@ -147,7 +147,6 @@ class UserList(BaseModel):
     @property
     def users(self):
         return self._users
-        pass
 
     @users.setter
     def users(self, users):
