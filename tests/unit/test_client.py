@@ -42,7 +42,6 @@ class TestNessusClient(object):
         foo = NessusClient._error_handler(foo)
 
         for (response, retry) in responses:
-            print (response, retry)
             if retry:
                 with pytest.raises(NessusRetryableException):
                     foo()
