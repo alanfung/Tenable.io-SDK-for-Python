@@ -7,6 +7,7 @@ from time import sleep
 
 from nessus.exceptions import NessusException, NessusRetryableException
 from nessus.resources.asset_lists import AssetListsResource
+from nessus.resources.base import BaseRequest
 from nessus.resources.scans import ScansResource
 from nessus.resources.session import SessionResource
 from nessus.resources.users import UsersResource
@@ -114,7 +115,14 @@ class NessusClient(object):
     @_retry
     @_error_handler
     def post(self, uri, payload=None, path_params=None, **kwargs):
+        if isinstance(payload, BaseRequest):
+            payload = payload.as_payload()
         return self._request('POST', uri, path_params, json=payload, **kwargs)
+
+    @_retry
+    @_error_handler
+    def delete(self, uri, path_params=None, **kwargs):
+        return self._request('DELETE', uri, path_params, **kwargs)
 
     def _request(self, method, uri, path_params=None, **kwargs):
         if path_params:

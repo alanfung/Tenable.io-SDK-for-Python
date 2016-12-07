@@ -57,6 +57,34 @@ class AssetList(BaseModel):
         self.user_permissions = user_permissions
 
 
+class AssetListList(BaseModel):
+
+    def __init__(
+            self,
+            asset_lists=None,
+    ):
+        self._asset_lists = None
+        self.asset_lists = asset_lists
+
+    @property
+    def asset_lists(self):
+        return self._asset_lists
+
+    @asset_lists.setter
+    def asset_lists(self, asset_lists):
+        if isinstance(asset_lists, list):
+            self._asset_lists = []
+            for user in asset_lists:
+                if isinstance(user, AssetList):
+                    self._asset_lists.append(user)
+                elif isinstance(user, dict):
+                    self._asset_lists.append(AssetList.from_dict(user))
+                else:
+                    raise NessusException(u'Invalid element type.')
+        else:
+            self._asset_lists = []
+
+
 class Session(BaseModel):
 
     def __init__(
