@@ -33,7 +33,28 @@ class TestAssetLists(object):
 
     def test_get(self, asset_list):
         got_asset_list = NessusClient().asset_lists.details(asset_list.id)
-        assert got_asset_list.id == asset_list.id, u'The `details` method returns asset list with matching IDs.'
+        assert got_asset_list.id == asset_list.id, u'The `details` method returns asset list with matching ID.'
+
+    def test_edit(self, app, asset_list):
+        previous_name = asset_list.name
+        new_name = app.session_name('test_edit')
+
+        edited_asset_list = NessusClient().asset_lists.edit(AssetListCreateRequest(
+            name=new_name,
+            members=asset_list.members,
+            type=asset_list.type,
+        ), asset_list.id)
+        assert edited_asset_list.name == new_name, u'The `edit` method returns asset list with matching name.'
+
+        got_asset_list = NessusClient().asset_lists.details(edited_asset_list.id)
+        assert got_asset_list.name == new_name, u'The `details` method returns asset list with matching name.'
+
+        reverted_asset_list = NessusClient().asset_lists.edit(AssetListCreateRequest(
+            name=previous_name,
+            members=got_asset_list.members,
+            type=got_asset_list.type,
+        ), asset_list.id)
+        assert reverted_asset_list.name == previous_name, u'The reverted asset list has matching name.'
 
     def test_list(self, asset_list):
         asset_list_list = NessusClient().asset_lists.list()
