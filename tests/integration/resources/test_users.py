@@ -73,3 +73,8 @@ class TestUsersResource(BaseTest):
         for user in user_list.users:
             assert isinstance(user, User), u'User list\'s element type'
         assert len([user for user in user_list.users if user.id == user_id]) == 1, u'User list contains created user'
+
+    def test_edit_password(self, client):
+        new_password = 'test_edit_password'
+
+        assert client.users.password(8, new_password), u'A new password should be set'
