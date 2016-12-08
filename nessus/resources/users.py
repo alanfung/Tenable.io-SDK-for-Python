@@ -34,6 +34,10 @@ class UsersResource(BaseResource):
         self._client.put('users/%(user_id)s/chpasswd', {'password': password}, {'user_id': user_id})
         return True
 
+    def details(self, user_id):
+        response = self._client.get('users/%(user_id)s', {'user_id': user_id})
+        return User.from_json(response.text)
+
 
 class UserCreateRequest(BaseRequest):
 
