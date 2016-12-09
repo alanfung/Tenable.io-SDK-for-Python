@@ -1,6 +1,8 @@
 import pytest
 import uuid
 
+from nessus.client import NessusClient
+
 
 class App:
 
@@ -14,3 +16,8 @@ class App:
 @pytest.fixture(scope='session')
 def app():
     yield App()
+
+
+@pytest.fixture(scope='session')
+def client():
+    yield NessusClient()
