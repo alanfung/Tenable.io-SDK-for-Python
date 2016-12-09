@@ -1,6 +1,7 @@
 from json import loads
 
 from nessus.exceptions import NessusException
+from nessus.util import payload_filter
 
 
 class BaseModel(object):
@@ -28,6 +29,9 @@ class BaseModel(object):
     @classmethod
     def from_json_list(cls, json_list):
         return cls.from_list(loads(json_list))
+
+    def as_payload(self, filter_=None):
+        return payload_filter(self.__dict__, filter_)
 
 
 class AssetList(BaseModel):

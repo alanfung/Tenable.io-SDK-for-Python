@@ -1,3 +1,6 @@
+from nessus.util import payload_filter
+
+
 class BaseResource(object):
 
     def __init__(self, client):
@@ -6,5 +9,5 @@ class BaseResource(object):
 
 class BaseRequest(object):
 
-    def as_payload(self):
-        return self.__dict__
+    def as_payload(self, filter_=None):
+        return payload_filter(self.__dict__, filter_)
