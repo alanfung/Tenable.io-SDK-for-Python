@@ -1,9 +1,10 @@
 import pytest
 
 from nessus.client import NessusClient, NessusException
+from tests.base import BaseTest
 
 
-class TestNessusClient(object):
+class TestNessusClient(BaseTest):
 
     def test_client_bad_keys(self):
         with pytest.raises(NessusException):

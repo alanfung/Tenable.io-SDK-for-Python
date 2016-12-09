@@ -34,5 +34,5 @@ $ pip install -r ./requirements.txt
 
 ### Run Tests
 ```sh
-$ py.test
+$ py.test -s
 ```

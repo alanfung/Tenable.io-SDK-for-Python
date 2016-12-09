@@ -7,9 +7,10 @@ else:
     import mock
 
 from nessus.client import NessusClient, NessusException, NessusRetryableException
+from tests.base import BaseTest
 
 
-class TestNessusClient(object):
+class TestNessusClient(BaseTest):
 
     def test_client_retries(self):
 

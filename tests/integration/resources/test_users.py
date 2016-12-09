@@ -1,8 +1,9 @@
 from nessus.client import NessusClient
 from nessus.resources.models import UserList
+from tests.base import BaseTest
 
 
-class TestUsersResource(object):
+class TestUsersResource(BaseTest):
 
     def test_list_return_correct_type(self):
         user_list = NessusClient().users.list()

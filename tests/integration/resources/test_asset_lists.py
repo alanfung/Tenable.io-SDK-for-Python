@@ -3,9 +3,10 @@ import pytest
 from nessus.client import NessusClient
 from nessus.resources.asset_lists import AssetListCreateRequest
 from nessus.resources.models import AssetList, AssetListList
+from tests.base import BaseTest
 
 
-class TestAssetLists(object):
+class TestAssetLists(BaseTest):
 
     @pytest.fixture(scope='class')
     def asset_list(self, app):
