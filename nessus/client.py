@@ -1,10 +1,9 @@
 import requests
-import six
 
-from os import environ
 from requests.utils import quote
 from time import sleep
 
+from nessus.config import NessusConfig
 from nessus.exceptions import NessusException, NessusRetryableException
 from nessus.resources.asset_lists import AssetListsResource
 from nessus.resources.base import BaseRequest
@@ -15,20 +14,6 @@ from nessus.resources.session import SessionResource
 from nessus.resources.users import UsersResource
 from nessus.util import Logger
 
-if six.PY34:
-    import configparser
-else:
-    import ConfigParser as configparser
-
-# Read nessus.ini config. Default to environment variables if exist.
-config = configparser.SafeConfigParser({
-    'endpoint': environ.get('NESSUS_ENDPOINT', 'https://cloud.tenable.com/'),
-    'access_key': environ.get('NESSUS_ACCESS_KEY'),
-    'secret_key': environ.get('NESSUS_SECRET_KEY'),
-})
-config.add_section('nessus')
-config.read('nessus.ini')
-
 
 class NessusClient(object):
 
@@ -37,9 +22,9 @@ class NessusClient(object):
 
     def __init__(
             self,
-            access_key=config.get('nessus', 'access_key'),
-            secret_key=config.get('nessus', 'secret_key'),
-            endpoint=config.get('nessus', 'endpoint'),
+            access_key=NessusConfig.get('access_key'),
+            secret_key=NessusConfig.get('secret_key'),
+            endpoint=NessusConfig.get('endpoint'),
     ):
         self._access_key = access_key
         self._secret_key = secret_key
