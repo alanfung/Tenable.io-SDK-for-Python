@@ -156,6 +156,204 @@ class PolicyList(BaseModel):
         self._policies = policies
 
 
+class Scan(BaseModel):
+
+    STATUS_CANCELED = u'canceled'
+    STATUS_COMPLETED = u'completed'
+    STATUS_EMPTY = u'empty'
+    STATUS_PAUSED = u'paused'
+    STATUS_PAUSING = u'pausing'
+    STATUS_PENDING = u'pending'
+    STATUS_RESUMING = u'resuming'
+    STATUS_RUNNING = u'running'
+    STATUS_STOPPING = u'stopping'
+    
+    def __init__(
+            self,
+            id=None,
+            uuid=None,
+            name=None,
+            type=None,
+            owner=None,
+            enabled=None,
+            folder_id=None,
+            read=None,
+            status=None,
+            shared=None,
+            user_permissions=None,
+            creation_date=None,
+            last_modification_date=None,
+            control=None,
+            starttime=None,
+            timezone=None,
+            rrules=None,
+    ):
+        self.id = id
+        self.uuid = uuid
+        self.name = name
+        self.type = type
+        self.owner = owner
+        self.enabled = enabled
+        self.folder_id = folder_id
+        self.read = read
+        self.status = status
+        self.shared = shared
+        self.user_permissions = user_permissions
+        self.creation_date = creation_date
+        self.last_modification_date = last_modification_date
+        self.control = control
+        self.starttime = starttime
+        self.timezone = timezone
+        self.rrules = rrules
+
+
+class ScanDetails(BaseModel):
+    
+    def __init__(
+            self,
+            info=None,
+            hosts=None,
+            comphosts=None,
+            notes=None,
+            remediations=None,
+            vulnerabilities=None,
+            compliance=None,
+            history=None,
+            filters=None,
+    ):
+        self._info = None
+
+        self.info = info
+        self.hosts = hosts
+        self.comphosts = comphosts
+        self.notes = notes
+        self.remediations = remediations
+        self.vulnerabilities = vulnerabilities
+        self.compliance = compliance
+        self.history = history
+        self.filters = filters
+    
+    @property
+    def info(self):
+        return self._info
+    
+    @info.setter
+    def info(self, info):
+        if isinstance(info, ScanDetailsInfo):
+            self._info = info
+        elif isinstance(info, dict):
+            self._info = ScanDetailsInfo.from_dict(info)
+        else:
+            self._info = None
+
+
+class ScanDetailsInfo(BaseModel):
+    
+    def __init__(
+            self,
+            acls=None,
+            edit_allowed=None,
+            status=None,
+            policy=None,
+            pci_can_upload=None,  # API uses "pci-can-upload" which is not a valid python attribute name.
+            hasaudittrail=None,
+            scan_start=None,
+            folder_id=None,
+            targets=None,
+            timestamp=None,
+            object_id=None,
+            scanner_name=None,
+            haskb=None,
+            uuid=None,
+            hostcount=None,
+            scan_end=None,
+            name=None,
+            user_permissions=None,
+            control=None,
+    ):
+        self.acls = acls
+        self.edit_allowed = edit_allowed
+        self.status = status
+        self.policy = policy
+        self.pci_can_upload = pci_can_upload
+        self.hasaudittrail = hasaudittrail
+        self.scan_start = scan_start
+        self.folder_id = folder_id
+        self.targets = targets
+        self.timestamp = timestamp
+        self.object_id = object_id
+        self.scanner_name = scanner_name
+        self.haskb = haskb
+        self.uuid = uuid
+        self.hostcount = hostcount
+        self.scan_end = scan_end
+        self.name = name
+        self.user_permissions = user_permissions
+        self.control = control
+
+    @classmethod
+    def from_dict(cls, dict_):
+        # Because API uses "pci-can-upload" API uses "pci-can-upload" which is not a valid python attribute name.
+        if 'pci-can-upload' in dict_:
+            dict_['pci_can_upload'] = dict_.pop('pci-can-upload')
+        return super(ScanDetailsInfo, cls).from_dict(dict_)
+
+    def as_payload(self, filter_=None):
+        # Because API uses "pci-can-upload" API uses "pci-can-upload" which is not a valid python attribute name.
+        payload = self.as_payload(filter_)
+        if 'pci_can_upload' in payload:
+            payload['pci-can-upload'] = payload.pop('pci_can_upload')
+        return payload
+
+
+class ScanList(BaseModel):
+
+    def __init__(
+            self,
+            folders=None,
+            scans=None,
+            timestamp=None,
+    ):
+        self._scans = None
+        self.folders = folders
+        self.scans = scans
+        self.timestamp = timestamp
+
+    @property
+    def scans(self):
+        return self._scans
+
+    @scans.setter
+    @BaseModel._model_list(Scan)
+    def scans(self, scans):
+        self._scans = scans
+        
+
+class ScanSettings(BaseModel):
+    
+    def __init__(
+            self,
+            name,
+            text_targets,
+            description=None,
+            emails=None,
+            enabled=True,
+            launch=None,
+            folder_id=None,
+            policy_id=None,
+            scanner_id=None,
+    ):
+        self.name = name
+        self.description = description
+        self.emails = emails
+        self.enabled = enabled
+        self.launch = launch
+        self.folder_id = folder_id
+        self.policy_id = policy_id
+        self.scanner_id = scanner_id
+        self.text_targets = text_targets
+
+
 class Session(BaseModel):
 
     def __init__(
