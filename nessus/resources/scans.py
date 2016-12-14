@@ -7,6 +7,8 @@ from nessus.resources.base import BaseRequest
 
 class ScansResource(BaseResource):
 
+    STATUS_EXPORT_READY = u'ready'
+
     def create(self, scan_create):
         response = self._client.post('scans', scan_create)
         return loads(response.text).get('scan', {}).get('id')
@@ -18,6 +20,28 @@ class ScansResource(BaseResource):
     def details(self, scan_id):
         response = self._client.get('scans/%(scan_id)s', path_params={'scan_id': scan_id})
         return ScanDetails.from_json(response.text)
+
+    def export_download(self, scan_id, file_id, stream=True, chunk_size=1024):
+        response = self._client.get('scans/%(scan_id)s/export/%(file_id)s/download',
+                                    path_params={'scan_id': scan_id, 'file_id': file_id},
+                                    stream=stream)
+        return response.iter_content(chunk_size=chunk_size)
+
+    def export_request(self, scan_id, scan_export, history_id=None):
+        """
+        :return: file_id
+        """
+        assert isinstance(scan_export, ScanExportRequest)
+        response = self._client.post('scans/%(scan_id)s/export',
+                                     scan_export,
+                                     path_params={'scan_id': scan_id},
+                                     params={'history_id': history_id} if history_id else None)
+        return loads(response.text).get('file')
+
+    def export_status(self, scan_id, file_id):
+        response = self._client.get('scans/%(scan_id)s/export/%(file_id)s/status',
+                                    path_params={'scan_id': scan_id, 'file_id': file_id})
+        return loads(response.text).get('status')
 
     def launch(self, scan_id):
         """
@@ -59,3 +83,32 @@ class ScanCreateRequest(BaseRequest):
             'uuid': self.uuid,
             'settings': self.settings.as_payload(True)
         }
+
+
+class ScanExportRequest(BaseRequest):
+
+    FORMAT_CSV = u'csv'
+    FORMAT_DB = u'db'
+    FORMAT_HTML = u'html'
+    FORMAT_NESSUS = u'nessus'
+    FORMAT_PDF = u'pdf'
+
+    def __init__(
+            self,
+            format,
+            password=None,
+            chapters=None,
+    ):
+        assert format in [
+            ScanExportRequest.FORMAT_CSV,
+            ScanExportRequest.FORMAT_DB,
+            ScanExportRequest.FORMAT_HTML,
+            ScanExportRequest.FORMAT_NESSUS,
+            ScanExportRequest.FORMAT_PDF,
+        ]
+        self.format = format
+        self.password = password
+        self.chapters = chapters
+
+    def as_payload(self, filter_=None):
+        return super(ScanExportRequest, self).as_payload(True)
