@@ -10,7 +10,11 @@ class App:
         self._uuid = uuid.uuid4()
 
     def session_name(self, name, length=8):
-        return u'%s_%s' % (name, self._uuid.hex[:length])
+        try:
+            session_name = name % self._uuid.hex[:length]
+        except TypeError:
+            session_name = u'%s_%s' % (name, self._uuid.hex[:length])
+        return session_name
 
 
 @pytest.fixture(scope='session')
