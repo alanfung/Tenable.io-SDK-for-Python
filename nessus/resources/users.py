@@ -30,6 +30,10 @@ class UsersResource(BaseResource):
         self._client.delete('users/%(user_id)s', {'user_id': user_id})
         return True
 
+    def password(self, user_id, password):
+        self._client.put('users/%(user_id)s/chpasswd', {'password': password}, {'user_id': user_id})
+        return True
+
 
 class UserCreateRequest(BaseRequest):
 
