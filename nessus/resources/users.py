@@ -1,7 +1,7 @@
 from json import loads
 
 from nessus.resources.base import BaseResource, BaseRequest
-from nessus.resources.models import User, UserList
+from nessus.resources.models import User, UserKeys, UserList
 
 
 class UsersResource(BaseResource):
@@ -37,6 +37,10 @@ class UsersResource(BaseResource):
     def details(self, user_id):
         response = self._client.get('users/%(user_id)s', {'user_id': user_id})
         return User.from_json(response.text)
+
+    def keys(self, user_id):
+        response = self._client.put('users/%(user_id)s/keys', path_params={'user_id': user_id})
+        return UserKeys.from_json(response.text)
 
 
 class UserCreateRequest(BaseRequest):

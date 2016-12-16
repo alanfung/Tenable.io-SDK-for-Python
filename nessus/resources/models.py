@@ -485,6 +485,35 @@ class User(BaseModel):
         self.last_login_attempt = last_login_attempt
 
 
+class UserKeys(BaseModel):
+
+    def __init__(
+            self,
+            access_key=None,
+            secret_key=None,
+    ):
+        self.access_key = access_key
+        self.secret_key = secret_key
+
+    @classmethod
+    def from_dict(cls, dict_):
+        # Because API uses camelCase for some reason; normalize to underscore here.
+        if 'accessKey' in dict_:
+            dict_['access_key'] = dict_.pop('accessKey')
+        if 'secretKey' in dict_:
+            dict_['secret_key'] = dict_.pop('secretKey')
+        return super(UserKeys, cls).from_dict(dict_)
+
+    def as_payload(self, filter_=None):
+        # Because API uses camelCase for some reason; normalize to underscore here.
+        payload = self.as_payload(filter_)
+        if 'access_key' in payload:
+            payload['accessKey'] = payload.pop('access_key')
+        if 'secret_key' in payload:
+            payload['secretKey'] = payload.pop('secret_key')
+        return payload
+
+
 class UserList(BaseModel):
 
     def __init__(

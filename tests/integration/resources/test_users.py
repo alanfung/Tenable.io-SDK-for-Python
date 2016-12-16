@@ -71,13 +71,13 @@ class TestUsersResource(BaseTest):
     def test_list(self, user_id, client):
         user_list = client.users.list()
         for user in user_list.users:
-            assert isinstance(user, User), u'User list\'s element type'
-        assert len([user for user in user_list.users if user.id == user_id]) == 1, u'User list contains created user'
+            assert isinstance(user, User), u'User list\'s element type.'
+        assert len([user for user in user_list.users if user.id == user_id]) == 1, u'User list contains created user.'
 
     def test_edit_password(self, client):
         new_password = 'test_edit_password'
 
-        assert client.users.password(8, new_password), u'A new password should be set'
+        assert client.users.password(8, new_password), u'A new password should be set.'
 
     def test_get_details(self, client):
         user_list = client.users.list()
@@ -86,4 +86,11 @@ class TestUsersResource(BaseTest):
         user = user_list.users[0]
 
         detail_list = client.users.details(user.id)
-        assert detail_list.id == user.id, u'The user ID returned should match the requested ID'
+        assert detail_list.id == user.id, u'The user ID returned should match the requested ID.'
+
+    def test_keys(self, client, user_id):
+        user_keys_a = client.users.keys(user_id)
+        user_keys_b = client.users.keys(user_id)
+
+        assert user_keys_a.access_key != user_keys_b.access_key, u'Generated access key should change every time.'
+        assert user_keys_a.secret_key != user_keys_b.secret_key, u'Generated secret key should change every time.'
