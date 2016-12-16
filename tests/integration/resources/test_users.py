@@ -78,3 +78,12 @@ class TestUsersResource(BaseTest):
         new_password = 'test_edit_password'
 
         assert client.users.password(8, new_password), u'A new password should be set'
+
+    def test_get_details(self, client):
+        user_list = client.users.list()
+        assert len(user_list.users) > 0, u'User list has at least one user for testing.'
+
+        user = user_list.users[0]
+
+        detail_list = client.users.details(user.id)
+        assert detail_list.id == user.id, u'The user ID returned should match the requested ID'
