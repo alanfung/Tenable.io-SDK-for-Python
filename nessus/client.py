@@ -9,6 +9,7 @@ from nessus.resources.asset_lists import AssetListsResource
 from nessus.resources.base import BaseRequest
 from nessus.resources.editor import EditorResource
 from nessus.resources.file import FileResource
+from nessus.resources.folders import FoldersResource
 from nessus.resources.policies import PoliciesResource
 from nessus.resources.scans import ScansResource
 from nessus.resources.session import SessionResource
@@ -44,6 +45,7 @@ class NessusClient(object):
         self.asset_lists = AssetListsResource(self)
         self.editor = EditorResource(self)
         self.file = FileResource(self)
+        self.folders = FoldersResource(self)
         self.policies = PoliciesResource(self)
         self.scans = ScansResource(self)
         self.session = SessionResource(self)

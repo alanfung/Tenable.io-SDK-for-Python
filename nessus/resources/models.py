@@ -103,6 +103,44 @@ class AssetListList(BaseModel):
     @BaseModel._model_list(AssetList)
     def asset_lists(self, asset_lists):
         self._asset_lists = asset_lists
+
+
+class Folder(BaseModel):
+    def __init__(
+            self,
+            id=None,
+            name=None,
+            type=None,
+            default_tag=None,
+            custom=None,
+            unread_count=None,
+    ):
+        self.id = id
+        self.name = name
+        self.type = type
+        self.default_tag = default_tag
+        self.custom = custom
+        self.unread_count = unread_count
+
+
+class FolderList(BaseModel):
+
+    def __init__(
+            self,
+            folders=None,
+    ):
+        self._folders = None
+
+        self.folders = folders
+
+    @property
+    def folders(self):
+        return self._folders
+
+    @folders.setter
+    @BaseModel._model_list(Folder)
+    def folders(self, folders):
+        self._folders = folders
     
     
 class Policy(BaseModel):
