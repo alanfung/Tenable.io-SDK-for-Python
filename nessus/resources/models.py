@@ -143,6 +143,41 @@ class FolderList(BaseModel):
         self._folders = folders
     
     
+class Group(BaseModel):
+
+    def __init__(
+            self,
+            id=None,
+            name=None,
+            permissions=None,
+            user_count=None,
+    ):
+        self.id = id
+        self.name = name
+        self.permissions = permissions
+        self.user_count = user_count
+
+
+class GroupList(BaseModel):
+
+    def __init__(
+            self,
+            groups=None,
+    ):
+        self._groups = None
+
+        self.groups = groups
+
+    @property
+    def groups(self):
+        return self._groups
+
+    @groups.setter
+    @BaseModel._model_list(Group)
+    def groups(self, groups):
+        self._groups = groups
+
+
 class Policy(BaseModel):
     
     def __init__(
