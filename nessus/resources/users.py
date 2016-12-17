@@ -42,6 +42,10 @@ class UsersResource(BaseResource):
         response = self._client.put('users/%(user_id)s/keys', path_params={'user_id': user_id})
         return UserKeys.from_json(response.text)
 
+    def enabled(self, user_id, enabled):
+        self._client.put('users/%(user_id)s/enabled', {'enabled': enabled}, {'user_id': user_id})
+        return True
+
 
 class UserCreateRequest(BaseRequest):
 

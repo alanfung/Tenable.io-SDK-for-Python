@@ -94,3 +94,14 @@ class TestUsersResource(BaseTest):
 
         assert user_keys_a.access_key != user_keys_b.access_key, u'Generated access key should change every time.'
         assert user_keys_a.secret_key != user_keys_b.secret_key, u'Generated secret key should change every time.'
+
+    def test_enabled(self, client, user_id):
+        client.users.enabled(user_id, False)
+
+        check_disabled_user = client.users.details(user_id)
+        assert not check_disabled_user.enabled, u'The user should be disabled.'
+
+        client.users.enabled(user_id, True)
+
+        check_enabled_user = client.users.details(user_id)
+        assert check_enabled_user.enabled, u'The user should be set back to enabled.'
