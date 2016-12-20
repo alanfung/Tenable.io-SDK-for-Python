@@ -1,10 +1,10 @@
 from json import loads
 
-from nessus.resources.base import BaseResource, BaseRequest
-from nessus.resources.models import User, UserKeys, UserList
+from nessus.api.base import BaseApi, BaseRequest
+from nessus.api.models import User, UserKeys, UserList
 
 
-class UsersResource(BaseResource):
+class UsersApi(BaseApi):
 
     def get(self, user_id):
         response = self._client.get('users/%(user_id)s', {'user_id': user_id})

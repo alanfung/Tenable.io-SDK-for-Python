@@ -2,8 +2,8 @@ import pytest
 from time import sleep
 
 from nessus.exceptions import NessusException
-from nessus.resources.models import Scan, ScanList, ScanSettings
-from nessus.resources.scans import ScansResource, ScanCreateRequest, ScanExportRequest
+from nessus.api.models import Scan, ScanList, ScanSettings
+from nessus.api.scans import ScansApi, ScanCreateRequest, ScanExportRequest
 
 from tests.base import BaseTest
 from tests.config import NessusTestConfig
@@ -117,8 +117,8 @@ class TestScansResource(BaseTest):
         assert file_id, u'The `export_request` method returns a valid file ID.'
 
         export_status = self.wait_until(lambda: client.scans.export_status(scan_id, file_id),
-                                        lambda status: status == ScansResource.STATUS_EXPORT_READY)
-        assert export_status == ScansResource.STATUS_EXPORT_READY, u'Scan export is ready.'
+                                        lambda status: status == ScansApi.STATUS_EXPORT_READY)
+        assert export_status == ScansApi.STATUS_EXPORT_READY, u'Scan export is ready.'
 
         iter_content = client.scans.export_download(scan_id, file_id, False, None)
         assert len(list(iter_content)), u'The `export_download` method return non-empty iterable content.'

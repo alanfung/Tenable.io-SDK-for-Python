@@ -1,6 +1,6 @@
 import pytest
 
-from nessus.resources.models import FolderList
+from nessus.api.models import FolderList
 from tests.base import BaseTest
 
 

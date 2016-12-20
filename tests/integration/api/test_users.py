@@ -1,8 +1,8 @@
 import pytest
 
-from nessus.resources.models import User, UserList
-from nessus.resources.users import UserCreateRequest
-from nessus.resources.users import UserEditRequest
+from nessus.api.models import User, UserList
+from nessus.api.users import UserCreateRequest
+from nessus.api.users import UserEditRequest
 
 from tests.base import BaseTest
 from tests.config import NessusTestConfig

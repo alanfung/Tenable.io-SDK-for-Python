@@ -1,11 +1,11 @@
 from json import loads
 
-from nessus.resources.base import BaseResource
-from nessus.resources.models import ScanDetails, ScanList, ScanSettings
-from nessus.resources.base import BaseRequest
+from nessus.api.base import BaseApi
+from nessus.api.models import ScanDetails, ScanList, ScanSettings
+from nessus.api.base import BaseRequest
 
 
-class ScansResource(BaseResource):
+class ScansApi(BaseApi):
 
     STATUS_EXPORT_READY = u'ready'
 

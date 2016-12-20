@@ -1,7 +1,7 @@
 import pytest
 
 from tests.base import BaseTest
-from nessus.resources.models import Group, User
+from nessus.api.models import Group, User
 
 
 class TestGroupsResource(BaseTest):
