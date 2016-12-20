@@ -1,7 +1,7 @@
 import pytest
 
-from nessus.resources.asset_lists import AssetListCreateRequest
-from nessus.resources.models import AssetList, AssetListList
+from nessus.api.asset_lists import AssetListCreateRequest
+from nessus.api.models import AssetList, AssetListList
 from tests.base import BaseTest
 
 

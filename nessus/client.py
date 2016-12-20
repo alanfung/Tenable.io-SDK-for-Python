@@ -5,16 +5,16 @@ from time import sleep
 
 from nessus.config import NessusConfig
 from nessus.exceptions import NessusException, NessusRetryableException
-from nessus.resources.asset_lists import AssetListsResource
-from nessus.resources.base import BaseRequest
-from nessus.resources.editor import EditorResource
-from nessus.resources.file import FileResource
-from nessus.resources.folders import FoldersResource
-from nessus.resources.groups import GroupsResource
-from nessus.resources.policies import PoliciesResource
-from nessus.resources.scans import ScansResource
-from nessus.resources.session import SessionResource
-from nessus.resources.users import UsersResource
+from nessus.api.asset_lists import AssetListsApi
+from nessus.api.base import BaseRequest
+from nessus.api.editor import EditorApi
+from nessus.api.file import FileApi
+from nessus.api.folders import FoldersApi
+from nessus.api.groups import GroupsApi
+from nessus.api.policies import PoliciesApi
+from nessus.api.scans import ScansApi
+from nessus.api.session import SessionApi
+from nessus.api.users import UsersApi
 from nessus.util import Logger
 
 
@@ -37,21 +37,21 @@ class NessusClient(object):
             u'X-ApiKeys': u'accessKey=%s; secretKey=%s;' % (self._access_key, self._secret_key)
         }
 
-        self._init_resources()
+        self._ini_api()
 
-    def _init_resources(self):
+    def _ini_api(self):
         """
-        Initialize all resources.
+        Initialize all api.
         """
-        self.asset_lists = AssetListsResource(self)
-        self.editor = EditorResource(self)
-        self.file = FileResource(self)
-        self.folders = FoldersResource(self)
-        self.groups = GroupsResource(self)
-        self.policies = PoliciesResource(self)
-        self.scans = ScansResource(self)
-        self.session = SessionResource(self)
-        self.users = UsersResource(self)
+        self.asset_lists = AssetListsApi(self)
+        self.editor = EditorApi(self)
+        self.file = FileApi(self)
+        self.folders = FoldersApi(self)
+        self.groups = GroupsApi(self)
+        self.policies = PoliciesApi(self)
+        self.scans = ScansApi(self)
+        self.session = SessionApi(self)
+        self.users = UsersApi(self)
 
     def _retry(f):
         """

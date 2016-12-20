@@ -1,9 +1,9 @@
 from json import loads
 
-from nessus.resources.base import BaseResource
+from nessus.api.base import BaseApi
 
 
-class FileResource(BaseResource):
+class FileApi(BaseApi):
 
     def upload(self, file):
         response = self._client.post('file/upload', files={'Filedata': (file.name, file)})

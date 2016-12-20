@@ -1,8 +1,8 @@
-from nessus.resources.base import BaseResource
-from nessus.resources.models import TemplateList
+from nessus.api.base import BaseApi
+from nessus.api.models import TemplateList
 
 
-class EditorResource(BaseResource):
+class EditorApi(BaseApi):
 
     def list(self, type):
         response = self._client.get('editor/%(type)s/templates', path_params={'type': type})

@@ -1,8 +1,8 @@
-from nessus.resources.base import BaseResource, BaseRequest
-from nessus.resources.models import AssetList, AssetListList
+from nessus.api.base import BaseApi, BaseRequest
+from nessus.api.models import AssetList, AssetListList
 
 
-class AssetListsResource(BaseResource):
+class AssetListsApi(BaseApi):
 
     def create(self, asset_list_create):
         response = self._client.post('asset-lists', asset_list_create)

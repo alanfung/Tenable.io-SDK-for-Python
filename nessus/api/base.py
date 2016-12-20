@@ -1,7 +1,7 @@
 from nessus.util import payload_filter
 
 
-class BaseResource(object):
+class BaseApi(object):
 
     def __init__(self, client):
         self._client = client

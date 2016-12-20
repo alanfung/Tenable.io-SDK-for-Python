@@ -1,10 +1,10 @@
 from json import loads
 
-from nessus.resources.base import BaseResource
-from nessus.resources.models import Folder, FolderList
+from nessus.api.base import BaseApi
+from nessus.api.models import Folder, FolderList
 
 
-class FoldersResource(BaseResource):
+class FoldersApi(BaseApi):
 
     def create(self, name):
         response = self._client.post('folders', {'name': name})
