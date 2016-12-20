@@ -8,7 +8,7 @@ class TestFolders(BaseTest):
 
     @pytest.fixture(scope='class')
     def folder_id(self, app, client):
-        folder_id = client.folders.create(app.session_name('test_folders'))
+        folder_id = client.folders.create(app.session_name('test_folders_0', length=5))
         yield folder_id
         assert client.folders.delete(folder_id), u'Folder is deleted.'
 
@@ -17,7 +17,7 @@ class TestFolders(BaseTest):
         assert isinstance(folder_list, FolderList), u'The `list` method return type.'
 
     def test_create_delete(self, app, client):
-        new_name = app.session_name('test_folders_create_delete')
+        new_name = app.session_name('test_folders_1', length=5)
         folder_id = client.folders.create(new_name)
         new_folder = self._get_folder_from_folder_list(client, folder_id)
 
@@ -28,7 +28,7 @@ class TestFolders(BaseTest):
         test_folder = self._get_folder_from_folder_list(client, folder_id)
         assert test_folder, u'Test folder exists.'
 
-        new_name = app.session_name('test_edit')
+        new_name = app.session_name('test_folders_2', length=5)
         old_name = test_folder.name
 
         client.folders.edit(test_folder.id, new_name)
