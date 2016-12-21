@@ -2,3 +2,4 @@ mock==2.0.0
 pytest==3.0.4
 requests==2.12.1
 six==1.10.0
+Sphinx==1.5.1
