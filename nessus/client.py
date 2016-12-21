@@ -8,6 +8,7 @@ from nessus.exceptions import NessusException, NessusRetryableException
 from nessus.api.asset_lists import AssetListsApi
 from nessus.api.base import BaseRequest
 from nessus.api.editor import EditorApi
+from nessus.api.exclusions import ExclusionApi
 from nessus.api.file import FileApi
 from nessus.api.folders import FoldersApi
 from nessus.api.groups import GroupsApi
@@ -45,6 +46,7 @@ class NessusClient(object):
         """
         self.asset_lists = AssetListsApi(self)
         self.editor = EditorApi(self)
+        self.exclusions = ExclusionApi(self)
         self.file = FileApi(self)
         self.folders = FoldersApi(self)
         self.groups = GroupsApi(self)

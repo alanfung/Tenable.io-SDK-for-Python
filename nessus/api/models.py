@@ -105,6 +105,115 @@ class AssetListList(BaseModel):
         self._asset_lists = asset_lists
 
 
+class Exclusion(BaseModel):
+    def __init__(
+            self,
+            id=None,
+            name=None,
+            description=None,
+            schedule=None,
+            creation_date=None,
+            last_modification_date=None,
+            members=None,
+    ):
+        self._schedule = None
+
+        self.id = id
+        self.name = name
+        self.description = description
+        self.schedule = schedule
+        self.creation_date = creation_date
+        self.last_modification_date = last_modification_date
+        self.members = members
+
+    @property
+    def schedule(self):
+        return self._schedule
+
+    @schedule.setter
+    def schedule(self, schedule):
+        if isinstance(schedule, ExclusionSchedule):
+            self._schedule = schedule
+        elif isinstance(schedule, dict):
+            self._schedule = ExclusionSchedule.from_dict(schedule)
+        else:
+            self._schedule = None
+
+
+class ExclusionList(BaseModel):
+    def __init__(
+            self,
+            exclusions=None
+    ):
+        self._exclusions = None
+        self.exclusions = exclusions
+
+    @property
+    def exclusions(self):
+        return self._exclusions
+
+    @exclusions.setter
+    @BaseModel._model_list(Exclusion)
+    def exclusions(self, exclusions):
+        self._exclusions = exclusions
+
+
+class ExclusionSchedule(BaseModel):
+
+    def __init__(
+            self,
+            enabled=None,
+            starttime=None,
+            endtime=None,
+            timezone=None,
+            rrules=None
+    ):
+        self._rrules = None
+
+        self.enabled = enabled
+        self.starttime = starttime
+        self.endtime = endtime
+        self.timezone = timezone
+        self.rrules = rrules
+
+    @property
+    def rrules(self):
+        return self._rrules
+
+    @rrules.setter
+    def rrules(self, rrules):
+        if isinstance(rrules, ExclusionRrules):
+            self._rrules = rrules
+        elif isinstance(rrules, dict):
+            self._rrules = ExclusionRrules.from_dict(rrules)
+        else:
+            self._rrules = None
+
+    def as_payload(self, filter_=None):
+        payload = super(ExclusionSchedule, self).as_payload(True)
+        if isinstance(self.rrules, ExclusionRrules):
+            payload.__setitem__('rrules', self.rrules.as_payload(True))
+        else:
+            payload.pop('rrules', None)
+        payload.pop('_rrules', None)
+        return payload
+
+
+class ExclusionRrules(BaseModel):
+
+    def __init__(
+            self,
+            freq=None,
+            interval=None,
+            byweekday=None,
+            bymonthday=None
+    ):
+        self.freq = freq
+        self.interval = interval
+        self.byweekday = byweekday
+        self.bymonthday = bymonthday
+
+
 class Folder(BaseModel):
     def __init__(
             self,
