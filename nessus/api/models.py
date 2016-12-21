@@ -340,6 +340,7 @@ class PolicyList(BaseModel):
 
 class Scan(BaseModel):
 
+    STATUS_ABORTED = u'aborted'
     STATUS_CANCELED = u'canceled'
     STATUS_COMPLETED = u'completed'
     STATUS_EMPTY = u'empty'

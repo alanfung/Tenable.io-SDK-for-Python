@@ -4,7 +4,7 @@ from requests.utils import quote
 from time import sleep
 
 from nessus.config import NessusConfig
-from nessus.exceptions import NessusException, NessusRetryableException
+from nessus.exceptions import NessusApiException, NessusRetryableApiException
 from nessus.api.asset_lists import AssetListsApi
 from nessus.api.base import BaseRequest
 from nessus.api.editor import EditorApi
@@ -16,6 +16,7 @@ from nessus.api.policies import PoliciesApi
 from nessus.api.scans import ScansApi
 from nessus.api.session import SessionApi
 from nessus.api.users import UsersApi
+from nessus.helpers.scan import ScanHelper
 from nessus.util import Logger
 
 
@@ -39,6 +40,7 @@ class NessusClient(object):
         }
 
         self._ini_api()
+        self._init_helpers()
 
     def _ini_api(self):
         """
@@ -55,6 +57,12 @@ class NessusClient(object):
         self.session = SessionApi(self)
         self.users = UsersApi(self)
 
+    def _init_helpers(self):
+        """
+        Initialize all helpers.
+        """
+        self.scan_helper = ScanHelper(self)
+
     def _retry(f):
         """
         Decorator to retry when NessusRetryableException is caught.
@@ -70,7 +78,7 @@ class NessusClient(object):
                 retry = False
                 try:
                     return f(*args, **kwargs)
-                except NessusRetryableException as exception:
+                except NessusRetryableApiException as exception:
                     count += 1
 
                     if count <= NessusClient.MAX_RETRIES:
@@ -80,7 +88,7 @@ class NessusClient(object):
                                     NessusClient)
                         sleep(sleep_ms / 1000.0)
                     else:
-                        raise NessusException(exception.response)
+                        raise NessusApiException(exception.response)
 
         return wrapper
 
@@ -95,11 +103,11 @@ class NessusClient(object):
             exception = None
 
             if response.status_code == 429:
-                raise NessusRetryableException(response)
+                raise NessusRetryableApiException(response)
             if response.status_code in [501, 502, 503]:
-                raise NessusRetryableException(response)
+                raise NessusRetryableApiException(response)
             if not 200 <= response.status_code <= 299:
-                raise NessusException(response)
+                raise NessusApiException(response)
 
             return response
         return wrapper

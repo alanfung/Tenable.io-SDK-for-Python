@@ -1,4 +1,8 @@
 class NessusException(Exception):
+    pass
+
+
+class NessusApiException(NessusException):
 
     def __init__(self, response):
         self.response = response
@@ -7,5 +11,5 @@ class NessusException(Exception):
         return self.response.text
 
 
-class NessusRetryableException(NessusException):
+class NessusRetryableApiException(NessusApiException):
     pass

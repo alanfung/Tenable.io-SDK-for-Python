@@ -1,7 +1,6 @@
 import pytest
-from time import sleep
 
-from nessus.exceptions import NessusException
+from nessus.exceptions import NessusApiException
 from nessus.api.models import Scan, ScanList, ScanSettings
 from nessus.api.scans import ScansApi, ScanCreateRequest, ScanExportRequest
 
@@ -42,7 +41,7 @@ class TestScansResource(BaseTest):
 
         try:
             client.scans.delete(scan_id)
-        except NessusException:
+        except NessusApiException:
             # This happens when the scan is not idling.
             client.scans.stop(scan_id)
             self.wait_until(lambda: client.scans.details(scan_id),
