@@ -6,6 +6,7 @@ Access key and secret key are needed to authenticate with the [Tenable Cloud API
 
 ##### INI File
 A `nessus.ini` can be created in the working directory. See `nessus.ini.example` on what it should look like.
+Note: The `nessus.ini.example` file is in Jinja template format.
 
 #### `NessusClient` Constructor Arguments
 ```python
