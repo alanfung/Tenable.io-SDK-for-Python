@@ -36,3 +36,14 @@ $ pip install -r ./requirements.txt
 ```sh
 $ py.test -s
 ```
+
+### Documentations
+To generate/force update the RST documentations from docstrings.
+```sh
+$ sphinx-apidoc -f -o doc/source nessus
+```
+Generate HTML documentation.
+```sh
+$ cd doc
+$ make clean && make html
+```
