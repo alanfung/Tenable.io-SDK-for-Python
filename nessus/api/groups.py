@@ -5,7 +5,8 @@ from nessus.api.models import Group, GroupList, UserList
 class GroupsApi(BaseApi):
 
     def add_user(self, group_id, user_id):
-        self._client.post('groups/%(group_id)s/users/%(user_id)s', {}, path_params={'group_id': group_id, 'user_id': user_id})
+        self._client.post('groups/%(group_id)s/users/%(user_id)s', {},
+                          path_params={'group_id': group_id, 'user_id': user_id})
         return True
 
     def create(self, name):

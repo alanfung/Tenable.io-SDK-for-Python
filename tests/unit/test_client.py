@@ -1,13 +1,13 @@
 import pytest
 import six
 
+from nessus.client import NessusClient, NessusApiException, NessusRetryableApiException
+from tests.base import BaseTest
+
 if six.PY34:
     import unittest.mock as mock
 else:
     import mock
-
-from nessus.client import NessusClient, NessusApiException, NessusRetryableApiException
-from tests.base import BaseTest
 
 
 class TestNessusClient(BaseTest):

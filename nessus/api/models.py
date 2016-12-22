@@ -250,8 +250,8 @@ class FolderList(BaseModel):
     @BaseModel._model_list(Folder)
     def folders(self, folders):
         self._folders = folders
-    
-    
+
+
 class Group(BaseModel):
 
     def __init__(
@@ -288,7 +288,7 @@ class GroupList(BaseModel):
 
 
 class Policy(BaseModel):
-    
+
     def __init__(
             self,
             id=None,
@@ -350,7 +350,7 @@ class Scan(BaseModel):
     STATUS_RESUMING = u'resuming'
     STATUS_RUNNING = u'running'
     STATUS_STOPPING = u'stopping'
-    
+
     def __init__(
             self,
             id=None,
@@ -391,7 +391,7 @@ class Scan(BaseModel):
 
 
 class ScanDetails(BaseModel):
-    
+
     def __init__(
             self,
             info=None,
@@ -415,11 +415,11 @@ class ScanDetails(BaseModel):
         self.compliance = compliance
         self.history = history
         self.filters = filters
-    
+
     @property
     def info(self):
         return self._info
-    
+
     @info.setter
     def info(self, info):
         if isinstance(info, ScanDetailsInfo):
@@ -431,7 +431,7 @@ class ScanDetails(BaseModel):
 
 
 class ScanDetailsInfo(BaseModel):
-    
+
     def __init__(
             self,
             acls=None,
@@ -510,10 +510,10 @@ class ScanList(BaseModel):
     @BaseModel._model_list(Scan)
     def scans(self, scans):
         self._scans = scans
-        
+
 
 class ScanSettings(BaseModel):
-    
+
     def __init__(
             self,
             name,
