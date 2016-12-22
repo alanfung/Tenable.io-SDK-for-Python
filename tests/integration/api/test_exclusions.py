@@ -101,4 +101,3 @@ class TestExclusionsResource(BaseTest):
         exclusion_list = client.exclusions.list()
         matching_exclusion = [e for e in exclusion_list.exclusions if e.id == exclusion_id]
         return matching_exclusion[0] if len(matching_exclusion) > 0 else None
-

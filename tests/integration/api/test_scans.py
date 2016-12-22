@@ -45,8 +45,8 @@ class TestScansResource(BaseTest):
             # This happens when the scan is not idling.
             client.scans.stop(scan_id)
             self.wait_until(lambda: client.scans.details(scan_id),
-                            lambda details: details.info.status in
-                                            [Scan.STATUS_CANCELED, Scan.STATUS_COMPLETED, Scan.STATUS_EMPTY])
+                            lambda details: details.info.status in [
+                                Scan.STATUS_CANCELED, Scan.STATUS_COMPLETED, Scan.STATUS_EMPTY])
             client.scans.delete(scan_id)
 
     def test_list_return_correct_type(self, client):

@@ -70,4 +70,3 @@ class ExclusionEditRequest(ExclusionSaveBaseRequest):
             schedule=None
     ):
         super(ExclusionEditRequest, self).__init__(name, members, description, schedule)
-
