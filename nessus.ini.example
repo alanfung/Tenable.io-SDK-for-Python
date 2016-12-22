@@ -1,12 +1,12 @@
 [nessus]
 ;endpoint=https://cloud.tenable.com/
-access_key=YOUR_ACCESS_KEY
-secret_key=YOUR_SECRET_KEY
+access_key={{ACCESS_KEY}}
+secret_key={{SECRET_KEY}}
 
 [nessus-test]
 ; Name of template to create a scan with.
 scan_template_name=discovery
 ; Host target to create a scan with. (Warning: do not scan targets that you're not authorized to.)
-scan_text_targets=YOUR_SCAN_TARGET
+scan_text_targets={{SCAN_TEXT_TARGETS}}
 ; The valid domain name for username
-users_domain_name=YOUR_DOMAIN
+users_domain_name={{USERS_DOMAIN_NAME}}
