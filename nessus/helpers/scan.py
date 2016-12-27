@@ -1,4 +1,7 @@
-from time import sleep, time
+import re
+import time
+
+from datetime import datetime
 
 from nessus.api.models import Scan, ScanSettings, Template
 from nessus.api.scans import ScansApi, ScanCreateRequest, ScanExportRequest
@@ -9,6 +12,15 @@ class ScanHelper(object):
 
     def __init__(self, client):
         self._client = client
+
+    def scans(self, name_regex=None, name=None):
+        scans = self._client.scans.list().scans
+        if name_regex:
+            name_regex = re.compile(name_regex)
+            scans = [scan for scan in scans if name_regex.match(scan.name)]
+        elif name:
+            scans = [scan for scan in scans if name == scan.name]
+        return [ScanRef(self._client, scan.id) for scan in scans]
 
     def id(self, id):
         """
@@ -87,19 +99,24 @@ class ScanRef(object):
         self._client = client
         self.id = id
 
+    def copy(self):
+        scan = self._client.scans.copy(self.id)
+        return ScanRef(self._client, scan.id)
+
     def delete(self):
         self._client.scans.delete(self.id)
         return self
 
-    def details(self):
-        return self._client.scans.details(self.id)
+    def details(self, history_id=None):
+        return self._client.scans.details(self.id, history_id=history_id)
 
-    def download(self, path, format=ScanExportRequest.FORMAT_PDF, file_open_mode='wb'):
-        self.wait_until_stopped()
+    def download(self, path, history_id=None, format=ScanExportRequest.FORMAT_PDF, file_open_mode='wb'):
+        self.wait_until_stopped(history_id=history_id)
 
         file_id = self._client.scans.export_request(
             self.id,
-            ScanExportRequest(format=format)
+            ScanExportRequest(format=format),
+            history_id
         )
         self._wait_until(
             lambda: self._client.scans.export_status(self.id, file_id) == ScansApi.STATUS_EXPORT_READY)
@@ -110,13 +127,34 @@ class ScanRef(object):
                 fd.write(chunk)
         return self
 
-    def launch(self):
+    def histories(self, since=None):
+        histories = self.details().history
+        if since:
+            assert isinstance(since, datetime), '`since` parameter should be an instance of datetime.'
+            ts = time.mktime(since.timetuple())
+            histories = [h for h in histories if h.creation_date >= ts]
+        return histories
+
+    def launch(self, wait=True):
         self._client.scans.launch(self.id)
+        if wait:
+            self._wait_until(lambda: self.status() not in Scan.STATUS_PENDING)
         return self
 
-    @property
-    def status(self):
-        return self.details().info.status
+    def pause(self, wait=True):
+        self._client.scans.pause(self.id)
+        if wait:
+            self._wait_until(lambda: self.status() not in Scan.STATUS_PAUSING)
+        return self
+
+    def resume(self, wait=True):
+        self._client.scans.resume(self.id)
+        if wait:
+            self._wait_until(lambda: self.status() not in Scan.STATUS_RESUMING)
+        return self
+
+    def status(self, history_id=None):
+        return self.details(history_id=history_id).info.status
 
     def stop(self):
         self._client.scans.stop(self.id)
@@ -124,14 +162,14 @@ class ScanRef(object):
         return self
 
     def wait_or_cancel_after(self, seconds):
-        start_time = time()
-        self._wait_until(lambda: time() - start_time > seconds or self.status in ScanRef.STATUSES_STOPPED)
-        if self.status not in ScanRef.STATUSES_STOPPED:
+        start_time = time.time()
+        self._wait_until(lambda: time.time() - start_time > seconds or self.status() in ScanRef.STATUSES_STOPPED)
+        if self.status() not in ScanRef.STATUSES_STOPPED:
             self.stop()
         return self
 
-    def wait_until_stopped(self):
-        self._wait_until(lambda: self.status in ScanRef.STATUSES_STOPPED)
+    def wait_until_stopped(self, history_id=None):
+        self._wait_until(lambda: self.status(history_id=history_id) in ScanRef.STATUSES_STOPPED)
         return self
 
     @staticmethod
@@ -139,4 +177,4 @@ class ScanRef(object):
         while True:
             if condition():
                 return True
-            sleep(1)
+            time.sleep(1)
