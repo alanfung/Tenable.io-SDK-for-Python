@@ -390,6 +390,24 @@ class Scan(BaseModel):
         self.rrules = rrules
 
 
+class ScanHistory(BaseModel):
+    def __init__(
+            self,
+            history_id=None,
+            uuid=None,
+            owner_id=None,
+            status=None,
+            creation_date=None,
+            last_modification_date=None,
+    ):
+        self.history_id = history_id
+        self.uuid = uuid
+        self.owner_id = owner_id
+        self.status = status
+        self.creation_date = creation_date
+        self.last_modification_date = last_modification_date
+
+
 class ScanDetails(BaseModel):
 
     def __init__(
@@ -405,6 +423,7 @@ class ScanDetails(BaseModel):
             filters=None,
     ):
         self._info = None
+        self._history = None
 
         self.info = info
         self.hosts = hosts
@@ -422,15 +441,24 @@ class ScanDetails(BaseModel):
 
     @info.setter
     def info(self, info):
-        if isinstance(info, ScanDetailsInfo):
+        if isinstance(info, ScanInfo):
             self._info = info
         elif isinstance(info, dict):
-            self._info = ScanDetailsInfo.from_dict(info)
+            self._info = ScanInfo.from_dict(info)
         else:
             self._info = None
 
+    @property
+    def history(self):
+        return self._history
 
-class ScanDetailsInfo(BaseModel):
+    @history.setter
+    @BaseModel._model_list(ScanHistory)
+    def history(self, history):
+        self._history = history
+
+
+class ScanInfo(BaseModel):
 
     def __init__(
             self,
@@ -479,7 +507,7 @@ class ScanDetailsInfo(BaseModel):
         # Because API uses "pci-can-upload" API uses "pci-can-upload" which is not a valid python attribute name.
         if 'pci-can-upload' in dict_:
             dict_['pci_can_upload'] = dict_.pop('pci-can-upload')
-        return super(ScanDetailsInfo, cls).from_dict(dict_)
+        return super(ScanInfo, cls).from_dict(dict_)
 
     def as_payload(self, filter_=None):
         # Because API uses "pci-can-upload" API uses "pci-can-upload" which is not a valid python attribute name.

@@ -23,8 +23,10 @@ class ScansApi(BaseApi):
         self._client.delete('scans/%(scan_id)s', path_params={'scan_id': scan_id})
         return True
 
-    def details(self, scan_id):
-        response = self._client.get('scans/%(scan_id)s', path_params={'scan_id': scan_id})
+    def details(self, scan_id, history_id=None):
+        response = self._client.get('scans/%(scan_id)s',
+                                    path_params={'scan_id': scan_id},
+                                    params={'history_id': history_id} if history_id else None)
         return ScanDetails.from_json(response.text)
 
     def export_download(self, scan_id, file_id, stream=True, chunk_size=1024):
