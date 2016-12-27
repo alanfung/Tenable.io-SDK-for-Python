@@ -5,22 +5,52 @@ from nessus.api.models import Exclusion, ExclusionList, ExclusionSchedule
 class ExclusionApi(BaseApi):
 
     def create(self, exclusion_create):
+        """Create a new exclusion
+
+        :param exclusion_create: An instance of :class:`ExclusionCreateRequest`.
+        :raise NessusApiException:  When API error is encountered.
+        :return: An instance of :class:`nessus.api.models.Exclusion`.
+        """
         response = self._client.post('exclusions', exclusion_create)
         return Exclusion.from_json(response.text)
 
     def delete(self, list_id):
+        """Delete an exclusion
+
+        :param list_id: The exclusion ID.
+        :raise NessusApiException:  When API error is encountered.
+        :return: True if successful.
+        """
         self._client.delete('exclusions/%(list_id)s', path_params={'list_id': list_id})
         return True
 
     def details(self, list_id):
+        """Return details of given exclusion
+
+        :param list_id: The exclusion ID.
+        :raise NessusApiException:  When API error is encountered.
+        :return: An instance of :class:`nessus.api.models.Exclusion`.
+        """
         response = self._client.get('exclusions/%(list_id)s', path_params={'list_id': list_id})
         return Exclusion.from_json(response.text)
 
     def edit(self, list_id, exclusion_edit):
+        """Edit the given exclusion
+
+        :param list_id: The exclusion ID.
+        :param exclusion_edit: An instance of :class:`ExclusionEditRequest`.
+        :raise NessusApiException:  When API error is encountered.
+        :return: An instance of :class:`nessus.api.models.Exclusion`.
+        """
         response = self._client.put('exclusions/%(list_id)s', exclusion_edit, path_params={'list_id': list_id})
         return Exclusion.from_json(response.text)
 
     def list(self):
+        """Return the current exclusions
+
+        :raise NessusApiException:  When API error is encountered.
+        :return: An instance of :class:`nessus.api.models.ExclusionList`.
+        """
         response = self._client.get('exclusions')
         return ExclusionList.from_json(response.text)
 
