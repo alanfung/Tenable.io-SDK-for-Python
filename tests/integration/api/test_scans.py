@@ -121,3 +121,10 @@ class TestScansResource(BaseTest):
 
         iter_content = client.scans.export_download(scan_id, file_id, False, None)
         assert len(list(iter_content)), u'The `export_download` method return non-empty iterable content.'
+
+    def test_copy_delete(self, client, scan_id):
+        scan = client.scans.copy(scan_id)
+        assert scan.id != scan_id, u'Copied scan should not have same ID as the original scan.'
+        client.scans.delete(scan.id)
+        with pytest.raises(NessusApiException):
+            client.scans.details(scan.id)

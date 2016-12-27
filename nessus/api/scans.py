@@ -1,7 +1,7 @@
 from json import loads
 
 from nessus.api.base import BaseApi
-from nessus.api.models import ScanDetails, ScanList, ScanSettings
+from nessus.api.models import Scan, ScanDetails, ScanList, ScanSettings
 from nessus.api.base import BaseRequest
 
 
@@ -12,6 +12,12 @@ class ScansApi(BaseApi):
     def create(self, scan_create):
         response = self._client.post('scans', scan_create)
         return loads(response.text).get('scan', {}).get('id')
+
+    def copy(self, scan_id):
+        response = self._client.post('scans/%(scan_id)s/copy',
+                                     {},
+                                     path_params={'scan_id': scan_id})
+        return Scan.from_json(response.text)
 
     def delete(self, scan_id):
         self._client.delete('scans/%(scan_id)s', path_params={'scan_id': scan_id})
