@@ -5,7 +5,7 @@ from six import StringIO
 from tests.base import BaseTest
 
 
-class TestFileResource(BaseTest):
+class TestFileApi(BaseTest):
 
     @pytest.fixture(scope='class')
     def file(self, app):

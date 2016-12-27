@@ -4,7 +4,7 @@ from nessus.api.models import FolderList
 from tests.base import BaseTest
 
 
-class TestFolders(BaseTest):
+class TestFoldersApi(BaseTest):
 
     @pytest.fixture(scope='class')
     def folder_id(self, app, client):

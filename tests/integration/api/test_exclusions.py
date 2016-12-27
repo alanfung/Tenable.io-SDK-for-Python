@@ -8,7 +8,7 @@ from nessus.api.models import Exclusion, ExclusionList, ExclusionSchedule, Exclu
 from tests.base import BaseTest
 
 
-class TestExclusionsResource(BaseTest):
+class TestExclusionsApi(BaseTest):
 
     @pytest.fixture(scope='class')
     def schedule_once(self):
