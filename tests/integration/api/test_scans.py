@@ -8,7 +8,7 @@ from tests.base import BaseTest
 from tests.config import NessusTestConfig
 
 
-class TestScansResource(BaseTest):
+class TestScansApi(BaseTest):
 
     @pytest.fixture(scope='class')
     def template(self, client):

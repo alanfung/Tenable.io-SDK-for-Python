@@ -5,7 +5,7 @@ from nessus.api.models import AssetList, AssetListList
 from tests.base import BaseTest
 
 
-class TestAssetLists(BaseTest):
+class TestAssetListsApi(BaseTest):
 
     @pytest.fixture(scope='class')
     def asset_list(self, app, client):

@@ -4,7 +4,7 @@ from tests.base import BaseTest
 from nessus.api.models import Group, User
 
 
-class TestGroupsResource(BaseTest):
+class TestGroupsApi(BaseTest):
 
     @pytest.fixture(scope='class')
     def group(self, app, client):

@@ -8,7 +8,7 @@ from tests.base import BaseTest
 from tests.config import NessusTestConfig
 
 
-class TestUsersResource(BaseTest):
+class TestUsersApi(BaseTest):
 
     @pytest.fixture(scope='class')
     def user_id(self, app, client):
