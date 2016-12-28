@@ -27,7 +27,7 @@ class TestScanHelper(BaseTest):
         assert scan_detail.info.object_id == scan.id, u'ScanRef `id` should match ID in ScanDetail.'
 
     def test_launch_stop_download(self, app, scan):
-        download_path = app.session_name('./.test_scan_launch_download')
+        download_path = app.session_file_output('test_scan_launch_download')
 
         assert not os.path.isfile(download_path), u'Scan report does not yet exist.'
         scan.launch().stop().download(download_path)
