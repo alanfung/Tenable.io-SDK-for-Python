@@ -21,7 +21,7 @@ class App:
         return session_name
 
     def session_file_output(self, name):
-        return u'%s/%s' % (self._output_dir, self.session_name(name))
+        return u'%s/%s' % (self._output_dir, name)
 
     def tear_down(self):
         shutil.rmtree(self._output_dir)

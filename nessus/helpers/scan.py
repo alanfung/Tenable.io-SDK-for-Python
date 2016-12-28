@@ -141,6 +141,9 @@ class ScanRef(object):
             self._wait_until(lambda: self.status() not in Scan.STATUS_PENDING)
         return self
 
+    def name(self, history_id=None):
+        return self.details(history_id=history_id).info.name
+
     def pause(self, wait=True):
         self._client.scans.pause(self.id)
         if wait:
