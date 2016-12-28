@@ -6,6 +6,7 @@ nessus.ini
 
 # Test state / virtualenvs
 .cache
+.tox
 .venv
 .venv3
 
