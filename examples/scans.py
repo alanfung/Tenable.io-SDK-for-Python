@@ -86,13 +86,6 @@ def example(test_name, test_file):
     os.remove(test_file_output)
 
     '''
-    Download the report for a specific scan in history.
-    '''
-    scan.download(test_file_output, history_id=histories[0].history_id)
-    assert os.path.isfile(test_file_output)
-    os.remove(test_file_output)
-
-    '''
     Create a new scan by copying a scan.
     '''
     scan_copy = scan.copy()
