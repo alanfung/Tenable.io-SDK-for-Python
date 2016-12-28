@@ -565,6 +565,56 @@ class ScanSettings(BaseModel):
         self.text_targets = text_targets
 
 
+class ServerProperties(BaseModel):
+
+    def __init__(
+            self,
+            capabilities=None,
+            enterprise=None,
+            expiration=None,
+            expiration_time=None,
+            idle_timeout=None,
+            license=None,
+            loaded_plugin_set=None,
+            login_banner=None,
+            nessus_type=None,
+            nessus_ui_version=None,
+            notifications=None,
+            plugin_set=None,
+            scanner_boottime=None,
+            server_version=None,
+            server_uuid=None,
+            update=None,
+    ):
+        self.capabilities = capabilities
+        self.enterprise = enterprise
+        self.expiration = expiration
+        self.expiration_time = expiration_time
+        self.idle_timeout = idle_timeout
+        self.license = license
+        self.loaded_plugin_set = loaded_plugin_set
+        self.login_banner = login_banner
+        self.nessus_type = nessus_type
+        self.nessus_ui_version = nessus_ui_version
+        self.notifications = notifications
+        self.plugin_set = plugin_set
+        self.scanner_boottime = scanner_boottime
+        self.server_version = server_version
+        self.server_uuid = server_uuid
+        self.update = update
+
+
+class ServerStatus(BaseModel):
+
+    def __init__(
+            self,
+            status=None,
+            progress=None,
+    ):
+        self.status = status
+        self.progress = progress
+
+
 class Session(BaseModel):
 
     def __init__(

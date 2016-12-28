@@ -14,6 +14,7 @@ from nessus.api.folders import FoldersApi
 from nessus.api.groups import GroupsApi
 from nessus.api.policies import PoliciesApi
 from nessus.api.scans import ScansApi
+from nessus.api.server import ServerApi
 from nessus.api.session import SessionApi
 from nessus.api.users import UsersApi
 from nessus.helpers.scan import ScanHelper
@@ -54,6 +55,7 @@ class NessusClient(object):
         self.groups = GroupsApi(self)
         self.policies = PoliciesApi(self)
         self.scans = ScansApi(self)
+        self.server = ServerApi(self)
         self.session = SessionApi(self)
         self.users = UsersApi(self)
 
