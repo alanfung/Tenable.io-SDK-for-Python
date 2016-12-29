@@ -17,7 +17,7 @@ NessusClient(access_key='YOUR_ACCESS_KEY', secret_key='YOUR_SECRET_KEY')
 NessusClient looks for the environment variables `NESSUS_ACCESS_KEY` and `NESSUS_SECRET_KEY`.
 
 ### Python Version
-2.7, 3.5
+2.7, 3.4
 
 ### Development
 It is recommend to use `virtualenv` to setup an isolated local environment.
