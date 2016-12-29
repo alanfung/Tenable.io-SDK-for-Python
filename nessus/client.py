@@ -12,6 +12,7 @@ from nessus.api.exclusions import ExclusionApi
 from nessus.api.file import FileApi
 from nessus.api.folders import FoldersApi
 from nessus.api.groups import GroupsApi
+from nessus.api.plugins import PluginsApi
 from nessus.api.policies import PoliciesApi
 from nessus.api.scans import ScansApi
 from nessus.api.session import SessionApi
@@ -52,6 +53,7 @@ class NessusClient(object):
         self.file = FileApi(self)
         self.folders = FoldersApi(self)
         self.groups = GroupsApi(self)
+        self.plugins = PluginsApi(self)
         self.policies = PoliciesApi(self)
         self.scans = ScansApi(self)
         self.session = SessionApi(self)
