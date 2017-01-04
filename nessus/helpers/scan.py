@@ -22,6 +22,12 @@ class ScanHelper(object):
         self._client = client
 
     def scans(self, name_regex=None, name=None):
+        """
+        Get scans.
+        :param name: A string to match scans with, default to None. Ignored if the `name_regex` argument is passed.
+        :param name_regex: A regular expression to match scans' names with, default to None.
+        :return: A list of ScanRef.
+        """
         scans = self._client.scans.list().scans
         if name_regex:
             name_regex = re.compile(name_regex)
@@ -40,6 +46,10 @@ class ScanHelper(object):
         return ScanRef(self._client, scan_detail.info.object_id)
 
     def stop_all(self):
+        """
+        Stop all scans.
+        :return: The current instance of ScanHelper.
+        """
         scans = self.scans()
         for scan in scans:
             try:
@@ -114,17 +124,37 @@ class ScanRef(object):
         self.id = id
 
     def copy(self):
+        """
+        Create a copy of the scan.
+        :return: An instance of ScanRef that references the newly copied scan.
+        """
         scan = self._client.scans.copy(self.id)
         return ScanRef(self._client, scan.id)
 
     def delete(self):
+        """
+        Delete the scan.
+        :return: The same ScanRef instance.
+        """
         self._client.scans.delete(self.id)
         return self
 
     def details(self, history_id=None):
+        """
+        Get the scan detail.
+        :return: An instance of :class:`nessus.api.models.ScanDetails`.
+        """
         return self._client.scans.details(self.id, history_id=history_id)
 
     def download(self, path, history_id=None, format=ScanExportRequest.FORMAT_PDF, file_open_mode='wb'):
+        """
+        Download a scan report.
+        :param path: The file path to save the report to.
+        :param format: The report format. Default to :class:`nessus.api.models.ScanDetails`.FORMAT_PDF.
+        :param file_open_mode: The open mode to the file output. Default to `wb'.
+        :param history_id: A specific scan history ID, None for the most recent scan history. default to None.
+        :return: The same ScanRef instance.
+        """
         self.wait_until_stopped(history_id=history_id)
 
         file_id = self._client.scans.export_request(
@@ -142,6 +172,12 @@ class ScanRef(object):
         return self
 
     def histories(self, since=None):
+        """
+        Get scan histories.
+        :param since: As instance of `datetime`. Default to None. If defined, only scan histories after this are
+        returned.
+        :return: A list of :class:`nessus.api.models.ScanHistory`.
+        """
         histories = self.details().history
         if since:
             assert isinstance(since, datetime), '`since` parameter should be an instance of datetime.'
@@ -150,36 +186,74 @@ class ScanRef(object):
         return histories
 
     def launch(self, wait=True):
+        """
+        Launch the scan.
+        :parma wait: If True, the method blocks until the scan's status is not
+            :class:`nessus.api.models.Scan`.STATUS_PENDING. Default is False.
+        :return: The same ScanRef instance.
+        """
         self._client.scans.launch(self.id)
         if wait:
             self._wait_until(lambda: self.status() not in Scan.STATUS_PENDING)
         return self
 
     def name(self, history_id=None):
+        """
+        Get the name of the scan.
+        :param history_id: The scan history to get name for, None for most recent. Default to None.
+        :return: The name.
+        """
         return self.details(history_id=history_id).info.name
 
     def pause(self, wait=True):
+        """
+        Pause the scan.
+        :parma wait: If True, the method blocks until the scan's status is not
+            :class:`nessus.api.models.Scan`.STATUS_PAUSING. Default is False.
+        :return: The same ScanRef instance.
+        """
         self._client.scans.pause(self.id)
         if wait:
-            self._wait_until(lambda: self.status() not in Scan.STATUS_PAUSING)
+            self._wait_until(lambda: self.status() is not Scan.STATUS_PAUSING)
         return self
 
     def resume(self, wait=True):
+        """
+        Resume the scan.
+        :parma wait: If True, the method blocks until the scan's status is not
+            :class:`nessus.api.models.Scan`.STATUS_RESUMING. Default is False.
+        :return: The same ScanRef instance.
+        """
         self._client.scans.resume(self.id)
         if wait:
-            self._wait_until(lambda: self.status() not in Scan.STATUS_RESUMING)
+            self._wait_until(lambda: self.status() is not Scan.STATUS_RESUMING)
         return self
 
     def status(self, history_id=None):
+        """
+        Get the scan's status.
+        :param history_id: The scan history to get status for, None for most recent. Default to None.
+        :return: The same ScanRef instance.
+        """
         return self.details(history_id=history_id).info.status
 
     def stop(self, wait=True):
+        """
+        Stop the scan.
+        :parma wait: If True, the method blocks until the scan's status is stopped. Default is False.
+        :return: The same ScanRef instance.
+        """
         self._client.scans.stop(self.id)
         if wait:
             self.wait_until_stopped()
         return self
 
     def wait_or_cancel_after(self, seconds):
+        """
+        Blocks until the scan is stopped, or cancel if it isn't stopped within the specified seconds.
+        :parma seconds: The maximum amount of seconds the method should block before canceling the scan.
+        :return: The same ScanRef instance.
+        """
         start_time = time.time()
         self._wait_until(lambda: time.time() - start_time > seconds or self.status() in ScanHelper.STATUSES_STOPPED)
         if self.status() not in ScanHelper.STATUSES_STOPPED:
@@ -187,6 +261,11 @@ class ScanRef(object):
         return self
 
     def wait_until_stopped(self, history_id=None):
+        """
+        Blocks until the scan is stopped.
+        :param history_id: The scan history to wait for, None for most recent. Default to None.
+        :return: The same ScanRef instance.
+        """
         self._wait_until(lambda: self.status(history_id=history_id) in ScanHelper.STATUSES_STOPPED)
         return self
 
