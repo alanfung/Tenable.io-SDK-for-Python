@@ -214,7 +214,7 @@ class ScanRef(object):
         """
         self._client.scans.pause(self.id)
         if wait:
-            self._wait_until(lambda: self.status() is not Scan.STATUS_PAUSING)
+            self._wait_until(lambda: self.status() != Scan.STATUS_PAUSING)
         return self
 
     def resume(self, wait=True):
@@ -226,7 +226,7 @@ class ScanRef(object):
         """
         self._client.scans.resume(self.id)
         if wait:
-            self._wait_until(lambda: self.status() is not Scan.STATUS_RESUMING)
+            self._wait_until(lambda: self.status() != Scan.STATUS_RESUMING)
         return self
 
     def status(self, history_id=None):
