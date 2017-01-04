@@ -344,6 +344,7 @@ class Scan(BaseModel):
     STATUS_CANCELED = u'canceled'
     STATUS_COMPLETED = u'completed'
     STATUS_EMPTY = u'empty'
+    STATUS_IMPORTED = u'imported'
     STATUS_PAUSED = u'paused'
     STATUS_PAUSING = u'pausing'
     STATUS_PENDING = u'pending'

@@ -10,6 +10,14 @@ from nessus.exceptions import NessusException
 
 class ScanHelper(object):
 
+    STATUSES_STOPPED = [
+        Scan.STATUS_ABORTED,
+        Scan.STATUS_CANCELED,
+        Scan.STATUS_COMPLETED,
+        Scan.STATUS_IMPORTED,
+        Scan.STATUS_EMPTY,
+    ]
+
     def __init__(self, client):
         self._client = client
 
@@ -30,6 +38,18 @@ class ScanHelper(object):
         """
         scan_detail = self._client.scans.details(id)
         return ScanRef(self._client, scan_detail.info.object_id)
+
+    def stop_all(self):
+        scans = self.scans()
+        for scan in scans:
+            try:
+                # Send stop requests for all scans first before waiting for it to be fully stopped.
+                scan.stop(False)
+            except NessusException:
+                pass
+        # Wait for scans to stop after all the stop requests are made.
+        [scan.wait_until_stopped() for scan in scans]
+        return self
 
     def create(self, name, text_targets, template):
         """
@@ -88,12 +108,6 @@ class ScanHelper(object):
 
 
 class ScanRef(object):
-
-    STATUSES_STOPPED = [
-        Scan.STATUS_ABORTED,
-        Scan.STATUS_CANCELED,
-        Scan.STATUS_COMPLETED,
-    ]
 
     def __init__(self, client, id):
         self._client = client
@@ -159,20 +173,21 @@ class ScanRef(object):
     def status(self, history_id=None):
         return self.details(history_id=history_id).info.status
 
-    def stop(self):
+    def stop(self, wait=True):
         self._client.scans.stop(self.id)
-        self.wait_until_stopped()
+        if wait:
+            self.wait_until_stopped()
         return self
 
     def wait_or_cancel_after(self, seconds):
         start_time = time.time()
-        self._wait_until(lambda: time.time() - start_time > seconds or self.status() in ScanRef.STATUSES_STOPPED)
-        if self.status() not in ScanRef.STATUSES_STOPPED:
+        self._wait_until(lambda: time.time() - start_time > seconds or self.status() in ScanHelper.STATUSES_STOPPED)
+        if self.status() not in ScanHelper.STATUSES_STOPPED:
             self.stop()
         return self
 
     def wait_until_stopped(self, history_id=None):
-        self._wait_until(lambda: self.status(history_id=history_id) in ScanRef.STATUSES_STOPPED)
+        self._wait_until(lambda: self.status(history_id=history_id) in ScanHelper.STATUSES_STOPPED)
         return self
 
     @staticmethod

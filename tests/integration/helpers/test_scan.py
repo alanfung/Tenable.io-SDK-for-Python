@@ -2,7 +2,7 @@ import os
 import pytest
 from time import time
 
-from nessus.helpers.scan import ScanRef
+from nessus.helpers.scan import ScanHelper
 
 from tests.base import BaseTest
 from tests.config import NessusTestConfig
@@ -45,4 +45,4 @@ class TestScanHelper(BaseTest):
 
         assert stop_time - start_time >= cancel_after_seconds, \
             u'Scan is ran for at least %s seconds.' % cancel_after_seconds
-        assert scan.status() in ScanRef.STATUSES_STOPPED, u'Scan is stopped.'
+        assert scan.status() in ScanHelper.STATUSES_STOPPED, u'Scan is stopped.'
