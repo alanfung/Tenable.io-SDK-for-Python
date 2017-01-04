@@ -338,6 +338,285 @@ class PolicyList(BaseModel):
         self._policies = policies
 
 
+class PolicySettings(BaseModel):
+
+    def __init__(
+            self,
+            acls=[],
+            additional_snmp_port1=None,
+            additional_snmp_port2=None,
+            additional_snmp_port3=None,
+            adtran_aos_offline_configs=None,
+            allow_post_scan_editing=None,
+            apm_force_updates=None,
+            apm_update_timeout=None,
+            arp_ping=None,
+            av_grace_period=None,
+            aws_ap_northeast_1=None,
+            aws_ap_southeast_1=None,
+            aws_ap_southeast_2=None,
+            aws_eu_west_1=None,
+            aws_sa_east_1=None,
+            aws_ui_region_type=None,
+            aws_us_east_1=None,
+            aws_us_gov_west_1=None,
+            aws_us_west_1=None,
+            aws_us_west_2=None,
+            aws_use_https=None,
+            aws_verify_ssl=None,
+            brocade_offline_configs=None,
+            check_crl=None,
+            cisco_config_to_audit=None,
+            cisco_offline_configs=None,
+            dell_f10_offline_configs=None,
+            description=None,
+            detect_ssl=None,
+            display_unreachable_hosts=None,
+            dont_use_ntlmv1=None,
+            enable_admin_shares=None,
+            enum_domain_users_end_uid=None,
+            enum_domain_users_start_uid=None,
+            enum_local_users_end_uid=None,
+            enum_local_users_start_uid=None,
+            enumerate_all_ciphers=None,
+            extremeos_offline_configs=None,
+            fast_network_discovery=None,
+            fireeye_offline_configs=None,
+            host_whitelist=None,
+            http_login_auth_regex_nocase=None,
+            http_login_auth_regex_on_headers=None,
+            http_login_invert_auth_regex=None,
+            http_login_max_redir=None,
+            http_login_method=None,
+            huawei_offline_configs=None,
+            icmp_ping=None,
+            icmp_ping_retries=None,
+            icmp_unreach_means_host_down=None,
+            junos_offline_configs=None,
+            log_live_hosts=None,
+            log_whole_attack=None,
+            max_checks_per_host=None,
+            max_hosts_per_scan=None,
+            max_simult_tcp_sessions_per_host=None,
+            max_simult_tcp_sessions_per_scan=None,
+            modbus_end_reg=None,
+            modbus_start_reg=None,
+            name=None,
+            netapp_offline_configs=None,
+            network_receive_timeout=None,
+            network_type=None,
+            never_send_win_creds_in_the_clear=None,
+            only_portscan_if_enum_failed=None,
+            patch_audit_over_rexec=None,
+            patch_audit_over_rsh=None,
+            patch_audit_over_telnet=None,
+            ping_the_remote_host=None,
+            portscan_range=None,
+            procurve_config_to_audit=None,
+            procurve_offline_configs=None,
+            provided_creds_only=None,
+            reduce_connections_on_congestion=None,
+            report_paranoia=None,
+            report_superseded_patches=None,
+            report_verbosity=None,
+            request_windows_domain_info=None,
+            reverse_lookup=None,
+            safe_checks=None,
+            scan_netware_hosts=None,
+            scan_network_printers=None,
+            scan_webapps=None,
+            silent_dependencies=None,
+            slice_network_addresses=None,
+            smtp_domain=None,
+            smtp_from=None,
+            smtp_to=None,
+            snmp_port=None,
+            snmp_scanner=None,
+            sonicos_offline_configs=None,
+            ssh_client_banner=None,
+            ssh_known_hosts=None,
+            ssh_netstat_scanner=None,
+            ssh_port=None,
+            ssl_prob_ports=None,
+            start_cotp_tsap=None,
+            start_remote_registry=None,
+            stop_cotp_tsap=None,
+            stop_scan_on_disconnect=None,
+            svc_detection_on_all_ports=None,
+            syn_firewall_detection=None,
+            syn_scanner=None,
+            tcp_firewall_detection=None,
+            tcp_ping=None,
+            tcp_ping_dest_ports=None,
+            tcp_scanner=None,
+            test_default_oracle_accounts=None,
+            test_local_nessus_host=None,
+            thorough_tests=None,
+            udp_ping=None,
+            udp_scanner=None,
+            unscanned_closed=None,
+            verify_open_ports=None,
+            win_known_bad_hashes=None,
+            win_known_good_hashes=None,
+            wmi_netstat_scanner=None,
+            wol_mac_addresses=None,
+            wol_wait_time=None,
+    ):
+        self.acls = acls
+        self.additional_snmp_port1 = additional_snmp_port1
+        self.additional_snmp_port2 = additional_snmp_port2
+        self.additional_snmp_port3 = additional_snmp_port3
+        self.adtran_aos_offline_configs = adtran_aos_offline_configs
+        self.allow_post_scan_editing = allow_post_scan_editing
+        self.apm_force_updates = apm_force_updates
+        self.apm_update_timeout = apm_update_timeout
+        self.arp_ping = arp_ping
+        self.av_grace_period = av_grace_period
+        self.aws_ap_northeast_1 = aws_ap_northeast_1
+        self.aws_ap_southeast_1 = aws_ap_southeast_1
+        self.aws_ap_southeast_2 = aws_ap_southeast_2
+        self.aws_eu_west_1 = aws_eu_west_1
+        self.aws_sa_east_1 = aws_sa_east_1
+        self.aws_ui_region_type = aws_ui_region_type
+        self.aws_us_east_1 = aws_us_east_1
+        self.aws_us_gov_west_1 = aws_us_gov_west_1
+        self.aws_us_west_1 = aws_us_west_1
+        self.aws_us_west_2 = aws_us_west_2
+        self.aws_use_https = aws_use_https
+        self.aws_verify_ssl = aws_verify_ssl
+        self.brocade_offline_configs = brocade_offline_configs
+        self.check_crl = check_crl
+        self.cisco_config_to_audit = cisco_config_to_audit
+        self.cisco_offline_configs = cisco_offline_configs
+        self.dell_f10_offline_configs = dell_f10_offline_configs
+        self.description = description
+        self.detect_ssl = detect_ssl
+        self.display_unreachable_hosts = display_unreachable_hosts
+        self.dont_use_ntlmv1 = dont_use_ntlmv1
+        self.enable_admin_shares = enable_admin_shares
+        self.enum_domain_users_end_uid = enum_domain_users_end_uid
+        self.enum_domain_users_start_uid = enum_domain_users_start_uid
+        self.enum_local_users_end_uid = enum_local_users_end_uid
+        self.enum_local_users_start_uid = enum_local_users_start_uid
+        self.enumerate_all_ciphers = enumerate_all_ciphers
+        self.extremeos_offline_configs = extremeos_offline_configs
+        self.fast_network_discovery = fast_network_discovery
+        self.fireeye_offline_configs = fireeye_offline_configs
+        self.host_whitelist = host_whitelist
+        self.http_login_auth_regex_nocase = http_login_auth_regex_nocase
+        self.http_login_auth_regex_on_headers = http_login_auth_regex_on_headers
+        self.http_login_invert_auth_regex = http_login_invert_auth_regex
+        self.http_login_max_redir = http_login_max_redir
+        self.http_login_method = http_login_method
+        self.huawei_offline_configs = huawei_offline_configs
+        self.icmp_ping = icmp_ping
+        self.icmp_ping_retries = icmp_ping_retries
+        self.icmp_unreach_means_host_down = icmp_unreach_means_host_down
+        self.junos_offline_configs = junos_offline_configs
+        self.log_live_hosts = log_live_hosts
+        self.log_whole_attack = log_whole_attack
+        self.max_checks_per_host = max_checks_per_host
+        self.max_hosts_per_scan = max_hosts_per_scan
+        self.max_simult_tcp_sessions_per_host = max_simult_tcp_sessions_per_host
+        self.max_simult_tcp_sessions_per_scan = max_simult_tcp_sessions_per_scan
+        self.modbus_end_reg = modbus_end_reg
+        self.modbus_start_reg = modbus_start_reg
+        self.name = name
+        self.netapp_offline_configs = netapp_offline_configs
+        self.network_receive_timeout = network_receive_timeout
+        self.network_type = network_type
+        self.never_send_win_creds_in_the_clear = never_send_win_creds_in_the_clear
+        self.only_portscan_if_enum_failed = only_portscan_if_enum_failed
+        self.patch_audit_over_rexec = patch_audit_over_rexec
+        self.patch_audit_over_rsh = patch_audit_over_rsh
+        self.patch_audit_over_telnet = patch_audit_over_telnet
+        self.ping_the_remote_host = ping_the_remote_host
+        self.portscan_range = portscan_range
+        self.procurve_config_to_audit = procurve_config_to_audit
+        self.procurve_offline_configs = procurve_offline_configs
+        self.provided_creds_only = provided_creds_only
+        self.reduce_connections_on_congestion = reduce_connections_on_congestion
+        self.report_paranoia = report_paranoia
+        self.report_superseded_patches = report_superseded_patches
+        self.report_verbosity = report_verbosity
+        self.request_windows_domain_info = request_windows_domain_info
+        self.reverse_lookup = reverse_lookup
+        self.safe_checks = safe_checks
+        self.scan_netware_hosts = scan_netware_hosts
+        self.scan_network_printers = scan_network_printers
+        self.scan_webapps = scan_webapps
+        self.silent_dependencies = silent_dependencies
+        self.slice_network_addresses = slice_network_addresses
+        self.smtp_domain = smtp_domain
+        self.smtp_from = smtp_from
+        self.smtp_to = smtp_to
+        self.snmp_port = snmp_port
+        self.snmp_scanner = snmp_scanner
+        self.sonicos_offline_configs = sonicos_offline_configs
+        self.ssh_client_banner = ssh_client_banner
+        self.ssh_known_hosts = ssh_known_hosts
+        self.ssh_netstat_scanner = ssh_netstat_scanner
+        self.ssh_port = ssh_port
+        self.ssl_prob_ports = ssl_prob_ports
+        self.start_cotp_tsap = start_cotp_tsap
+        self.start_remote_registry = start_remote_registry
+        self.stop_cotp_tsap = stop_cotp_tsap
+        self.stop_scan_on_disconnect = stop_scan_on_disconnect
+        self.svc_detection_on_all_ports = svc_detection_on_all_ports
+        self.syn_firewall_detection = syn_firewall_detection
+        self.syn_scanner = syn_scanner
+        self.tcp_firewall_detection = tcp_firewall_detection
+        self.tcp_ping = tcp_ping
+        self.tcp_ping_dest_ports = tcp_ping_dest_ports
+        self.tcp_scanner = tcp_scanner
+        self.test_default_oracle_accounts = test_default_oracle_accounts
+        self.test_local_nessus_host = test_local_nessus_host
+        self.thorough_tests = thorough_tests
+        self.udp_ping = udp_ping
+        self.udp_scanner = udp_scanner
+        self.unscanned_closed = unscanned_closed
+        self.verify_open_ports = verify_open_ports
+        self.win_known_bad_hashes = win_known_bad_hashes
+        self.win_known_good_hashes = win_known_good_hashes
+        self.wmi_netstat_scanner = wmi_netstat_scanner
+        self.wol_mac_addresses = wol_mac_addresses
+        self.wol_wait_time = wol_wait_time
+
+
+class PolicyDetails(BaseModel):
+
+    def __init__(
+            self,
+            uuid=None,
+            audits=None,
+            credentials=None,
+            plugins=None,
+            scap=None,
+            settings=None,
+    ):
+        self._settings = None
+
+        self.uuid = uuid
+        self.audits = audits
+        self.credentials = credentials
+        self.plugins = plugins
+        self.scap = scap
+        self.settings = settings
+
+    @property
+    def settings(self):
+        return self._settings
+
+    @settings.setter
+    def settings(self, settings):
+        if isinstance(settings, PolicySettings):
+            self._settings = settings
+        elif isinstance(settings, dict):
+            self._settings = PolicySettings.from_dict(settings)
+        else:
+            self._settings = None
+
+
 class Scan(BaseModel):
 
     STATUS_ABORTED = u'aborted'
