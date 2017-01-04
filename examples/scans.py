@@ -4,8 +4,8 @@ from datetime import datetime
 from time import time
 
 from nessus.api.models import Scan
-from nessus.exceptions import NessusApiException
 from nessus.client import NessusClient
+from nessus.exceptions import NessusApiException
 
 
 def example(test_name, test_file):
@@ -91,6 +91,12 @@ def example(test_name, test_file):
     scan_copy = scan.copy()
     assert scan_copy.id != scan.id
     assert scan_copy.status() == Scan.STATUS_EMPTY
+
+    '''
+    Stop all scans.
+    Note: Use with caution as this will stop all ongoing scans (including any automated test).
+    '''
+    # client.scan_helper.stop_all()
 
     '''
     Delete scans.
