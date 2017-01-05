@@ -102,7 +102,6 @@ class NessusClient(object):
         """
         def wrapper(*args, **kwargs):
             response = f(*args, **kwargs)
-            exception = None
 
             if response.status_code == 429:
                 raise NessusRetryableApiException(response)
