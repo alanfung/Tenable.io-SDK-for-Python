@@ -287,6 +287,108 @@ class GroupList(BaseModel):
         self._groups = groups
 
 
+class Plugin(BaseModel):
+
+    def __init__(
+            self,
+            id=None,
+            name=None
+    ):
+        self.id = id
+        self.name = name
+
+
+class PluginAttribute(BaseModel):
+
+    def __init__(
+            self,
+            attribute_name=None,
+            attribute_value=None
+    ):
+        self.attribute_name = attribute_name
+        self.attribute_value = attribute_value
+
+
+class PluginDetails(BaseModel):
+
+    def __init__(
+            self,
+            id=None,
+            name=None,
+            family_name=None,
+            attributes=None
+    ):
+        self._attributes = None
+        self.id = id
+        self.name = name
+        self.family_name = family_name
+        self.attributes = attributes
+
+    @property
+    def attributes(self):
+        return self._attributes
+
+    @attributes.setter
+    @BaseModel._model_list(PluginAttribute)
+    def attributes(self, attributes):
+        self._attributes = attributes
+
+
+class PluginFamily(BaseModel):
+
+    def __init__(
+            self,
+            id=None,
+            name=None,
+            count=None
+    ):
+        self.id = id
+        self.name = name
+        self.count = count
+
+
+class PluginFamilyDetails(BaseModel):
+
+    def __init__(
+            self,
+            id=None,
+            name=None,
+            plugins=None
+    ):
+        self._plugins = None
+        self.id = id
+        self.name = name
+        self.plugins = plugins
+
+    @property
+    def plugins(self):
+        return self._plugins
+
+    @plugins.setter
+    @BaseModel._model_list(Plugin)
+    def plugins(self, plugins):
+        self._plugins = plugins
+
+
+class PluginFamilyList(BaseModel):
+
+    def __init__(
+            self,
+            families=None
+    ):
+        self._families = None
+        self.families = families
+
+    @property
+    def families(self):
+        return self._families
+
+    @families.setter
+    @BaseModel._model_list(PluginFamily)
+    def families(self, families):
+        self._families = families
+
+
 class Policy(BaseModel):
 
     def __init__(
