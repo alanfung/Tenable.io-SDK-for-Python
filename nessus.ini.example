@@ -10,3 +10,5 @@ scan_template_name=discovery
 scan_text_targets={{SCAN_TEXT_TARGETS}}
 ; The valid domain name for username
 users_domain_name={{USERS_DOMAIN_NAME}}
+; Name of template to create a policy with.
+policy_template_name=discovery
