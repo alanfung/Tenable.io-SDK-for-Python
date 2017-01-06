@@ -2,7 +2,7 @@ import pytest
 import os
 
 from nessus.api.models import Policy, PolicyDetails, PolicyList, PolicySettings
-from nessus.api.policies import PolicyCreateRequest, PolicyImportRequest
+from nessus.api.policies import PolicyCreateRequest, PolicyConfigureRequest, PolicyImportRequest
 
 from tests.base import BaseTest
 from tests.config import NessusTestConfig
@@ -63,7 +63,7 @@ class TestPoliciesApi(BaseTest):
         copied_policy.settings.description = new_description
         response = client.policies.configure(
             copied_policy_id,
-            PolicyCreateRequest(
+            PolicyConfigureRequest(
                 copied_policy.uuid,
                 copied_policy.settings
             )

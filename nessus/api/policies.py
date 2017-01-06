@@ -7,15 +7,15 @@ from nessus.api.base import BaseRequest
 
 class PoliciesApi(BaseApi):
 
-    def configure(self, policy_id, policy_create_request):
+    def configure(self, policy_id, policy_configure_request):
         """Update a policy.
 
         :param policy_id: Policy id.
-        :param policy_create_request: An instance of :class:`PolicyCreateRequest`.
+        :param policy_configure_request: An instance of :class:`PolicyConfigureRequest`.
         :raise NessusApiException:  When API error is encountered.
         :return: True if successful.
         """
-        self._client.put('policies/%(policy_id)s', policy_create_request,
+        self._client.put('policies/%(policy_id)s', policy_configure_request,
                          path_params={'policy_id': policy_id})
         return True
 
@@ -112,6 +112,10 @@ class PolicyCreateRequest(BaseRequest):
             'uuid': self.uuid,
             'settings': self.settings.as_payload(True)
         }
+
+
+class PolicyConfigureRequest(PolicyCreateRequest):
+    pass
 
 
 class PolicyImportRequest(BaseRequest):
