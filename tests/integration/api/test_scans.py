@@ -1,8 +1,9 @@
+import os
 import pytest
 
 from nessus.exceptions import NessusApiException
 from nessus.api.models import Scan, ScanList, ScanSettings
-from nessus.api.scans import ScansApi, ScanCreateRequest, ScanExportRequest
+from nessus.api.scans import ScansApi, ScanCreateRequest, ScanExportRequest, ScanImportRequest
 
 from tests.base import BaseTest
 from tests.config import NessusTestConfig
@@ -19,7 +20,7 @@ class TestScansApi(BaseTest):
         assert len(template_list.templates) > 0, u'At least one scan template.'
 
         test_templates = [t for t in template_list.templates if t.name == NessusTestConfig.get('scan_template_name')]
-        assert len(test_templates) > 0
+        assert len(test_templates) > 0, u'At least one test template.'
 
         yield test_templates[0]
 
@@ -95,7 +96,7 @@ class TestScansApi(BaseTest):
                                        lambda details: details.info.status in [Scan.STATUS_CANCELED])
         assert scan_details.info.status == Scan.STATUS_CANCELED, u'Scan is canceled.'
 
-    def test_export(self, client, scan_id):
+    def test_export_import(self, app, client, scan_id):
 
         # Cannot export on a test that has never been launched, therefore launch the scan first.
         client.scans.launch(scan_id)
@@ -110,7 +111,7 @@ class TestScansApi(BaseTest):
         file_id = client.scans.export_request(
             scan_id,
             ScanExportRequest(
-                format=ScanExportRequest.FORMAT_PDF
+                format=ScanExportRequest.FORMAT_NESSUS
             )
         )
         assert file_id, u'The `export_request` method returns a valid file ID.'
@@ -120,7 +121,30 @@ class TestScansApi(BaseTest):
         assert export_status == ScansApi.STATUS_EXPORT_READY, u'Scan export is ready.'
 
         iter_content = client.scans.export_download(scan_id, file_id, False, None)
-        assert len(list(iter_content)), u'The `export_download` method return non-empty iterable content.'
+
+        download_path = app.session_file_output('test_scan_export_import')
+        assert not os.path.isfile(download_path), u'Scan report does not yet exist.'
+
+        with open(download_path, 'wb') as fd:
+            for chunk in iter_content:
+                fd.write(chunk)
+        assert os.path.isfile(download_path), u'Scan report is downloaded.'
+        assert os.path.getsize(download_path) > 0, u'Scan report is not empty.'
+
+        with open(download_path, 'rb') as fu:
+            upload_file_name = client.file.upload(fu)
+        assert upload_file_name, u'File `upload` method returns valid file name.'
+
+        imported_scan_id = client.scans.import_scan(ScanImportRequest(upload_file_name))
+        assert isinstance(imported_scan_id, int), u'Import request returns scan id.'
+
+        imported_scan_details = client.scans.details(imported_scan_id)
+        scan_details = client.scans.details(scan_id)
+        assert imported_scan_details.info.name == scan_details.info.name, \
+            u'Imported scan retains name of exported scan.'
+
+        os.remove(download_path)
+        client.scans.delete(imported_scan_id)
 
     def test_copy_delete(self, client, scan_id):
         scan = client.scans.copy(scan_id)

@@ -96,6 +96,16 @@ class ScansApi(BaseApi):
                                     path_params={'scan_id': scan_id, 'file_id': file_id})
         return loads(response.text).get('status')
 
+    def import_scan(self, scan_import):
+        """Import an existing scan which has been uploaded using :func:`Nessus.FileApi.upload`
+
+        :param scan_import: An instance of :class:`ScanImportRequest`.
+        :raise NessusApiException:  When API error is encountered.
+        :return: The ID of the imported scan.
+        """
+        response = self._client.post('scans/import', scan_import)
+        return loads(response.text).get('scan', {}).get('id')
+
     def launch(self, scan_id):
         """Launch a scan.
 
@@ -191,3 +201,16 @@ class ScanExportRequest(BaseRequest):
 
     def as_payload(self, filter_=None):
         return super(ScanExportRequest, self).as_payload(True)
+
+
+class ScanImportRequest(BaseRequest):
+
+    def __init__(
+            self,
+            file,
+            folder_id=None,
+            password=None
+    ):
+        self.file = file
+        self.folder_id = folder_id
+        self.password = password
