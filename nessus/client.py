@@ -48,18 +48,18 @@ class NessusClient(object):
         """
         Initialize all api.
         """
-        self.asset_lists = AssetListsApi(self)
-        self.editor = EditorApi(self)
-        self.exclusions = ExclusionApi(self)
-        self.file = FileApi(self)
-        self.folders = FoldersApi(self)
-        self.groups = GroupsApi(self)
-        self.plugins = PluginsApi(self)
-        self.policies = PoliciesApi(self)
-        self.scans = ScansApi(self)
-        self.server = ServerApi(self)
-        self.session = SessionApi(self)
-        self.users = UsersApi(self)
+        self.asset_lists_api = AssetListsApi(self)
+        self.editor_api = EditorApi(self)
+        self.exclusions_api = ExclusionApi(self)
+        self.file_api = FileApi(self)
+        self.folders_api = FoldersApi(self)
+        self.groups_api = GroupsApi(self)
+        self.plugins_api = PluginsApi(self)
+        self.policies_api = PoliciesApi(self)
+        self.scans_api = ScansApi(self)
+        self.server_api = ServerApi(self)
+        self.session_api = SessionApi(self)
+        self.users_api = UsersApi(self)
 
     def _init_helpers(self):
         """

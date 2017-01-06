@@ -28,7 +28,7 @@ class ScanHelper(object):
         :param name_regex: A regular expression to match scans' names with, default to None.
         :return: A list of ScanRef.
         """
-        scans = self._client.scans.list().scans
+        scans = self._client.scans_api.list().scans
         if name_regex:
             name_regex = re.compile(name_regex)
             scans = [scan for scan in scans if name_regex.match(scan.name)]
@@ -42,7 +42,7 @@ class ScanHelper(object):
         :param id: Scan ID.
         :return: ScanRef referenced by id if exists.
         """
-        scan_detail = self._client.scans.details(id)
+        scan_detail = self._client.scans_api.details(id)
         return ScanRef(self._client, scan_detail.info.object_id)
 
     def stop_all(self):
@@ -80,7 +80,7 @@ class ScanHelper(object):
         if not t:
             raise NessusException(u'Template with name or title as "%s" not found.' % template)
 
-        scan_id = self._client.scans.create(
+        scan_id = self._client.scans_api.create(
             ScanCreateRequest(
                 t.uuid,
                 ScanSettings(
@@ -101,14 +101,14 @@ class ScanHelper(object):
         template = None
 
         if name:
-            template_list = self._client.editor.list('scan')
+            template_list = self._client.editor_api.list('scan')
             for t in template_list.templates:
                 if t.name == name:
                     template = t
                     break
 
         elif title:
-            template_list = self._client.editor.list('scan')
+            template_list = self._client.editor_api.list('scan')
             for t in template_list.templates:
                 if t.title == title:
                     template = t
@@ -128,7 +128,7 @@ class ScanRef(object):
         Create a copy of the scan.
         :return: An instance of ScanRef that references the newly copied scan.
         """
-        scan = self._client.scans.copy(self.id)
+        scan = self._client.scans_api.copy(self.id)
         return ScanRef(self._client, scan.id)
 
     def delete(self):
@@ -136,7 +136,7 @@ class ScanRef(object):
         Delete the scan.
         :return: The same ScanRef instance.
         """
-        self._client.scans.delete(self.id)
+        self._client.scans_api.delete(self.id)
         return self
 
     def details(self, history_id=None):
@@ -144,7 +144,7 @@ class ScanRef(object):
         Get the scan detail.
         :return: An instance of :class:`nessus.api.models.ScanDetails`.
         """
-        return self._client.scans.details(self.id, history_id=history_id)
+        return self._client.scans_api.details(self.id, history_id=history_id)
 
     def download(self, path, history_id=None, format=ScanExportRequest.FORMAT_PDF, file_open_mode='wb'):
         """
@@ -157,15 +157,15 @@ class ScanRef(object):
         """
         self.wait_until_stopped(history_id=history_id)
 
-        file_id = self._client.scans.export_request(
+        file_id = self._client.scans_api.export_request(
             self.id,
             ScanExportRequest(format=format),
             history_id
         )
         self._wait_until(
-            lambda: self._client.scans.export_status(self.id, file_id) == ScansApi.STATUS_EXPORT_READY)
+            lambda: self._client.scans_api.export_status(self.id, file_id) == ScansApi.STATUS_EXPORT_READY)
 
-        iter_content = self._client.scans.export_download(self.id, file_id)
+        iter_content = self._client.scans_api.export_download(self.id, file_id)
         with open(path, file_open_mode) as fd:
             for chunk in iter_content:
                 fd.write(chunk)
@@ -192,7 +192,7 @@ class ScanRef(object):
             :class:`nessus.api.models.Scan`.STATUS_PENDING. Default is False.
         :return: The same ScanRef instance.
         """
-        self._client.scans.launch(self.id)
+        self._client.scans_api.launch(self.id)
         if wait:
             self._wait_until(lambda: self.status() not in Scan.STATUS_PENDING)
         return self
@@ -212,7 +212,7 @@ class ScanRef(object):
             :class:`nessus.api.models.Scan`.STATUS_PAUSING. Default is False.
         :return: The same ScanRef instance.
         """
-        self._client.scans.pause(self.id)
+        self._client.scans_api.pause(self.id)
         if wait:
             self._wait_until(lambda: self.status() != Scan.STATUS_PAUSING)
         return self
@@ -224,7 +224,7 @@ class ScanRef(object):
             :class:`nessus.api.models.Scan`.STATUS_RESUMING. Default is False.
         :return: The same ScanRef instance.
         """
-        self._client.scans.resume(self.id)
+        self._client.scans_api.resume(self.id)
         if wait:
             self._wait_until(lambda: self.status() != Scan.STATUS_RESUMING)
         return self
@@ -243,7 +243,7 @@ class ScanRef(object):
         :parma wait: If True, the method blocks until the scan's status is stopped. Default is False.
         :return: The same ScanRef instance.
         """
-        self._client.scans.stop(self.id)
+        self._client.scans_api.stop(self.id)
         if wait:
             self.wait_until_stopped()
         return self

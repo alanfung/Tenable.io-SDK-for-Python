@@ -34,7 +34,7 @@ class TestExclusionsApi(BaseTest):
         """
         Create an exclusion for testing.
         """
-        exclusion = client.exclusions.create(
+        exclusion = client.exclusions_api.create(
             ExclusionCreateRequest(
                 app.session_name('test_exclusions'),
                 u'fake.tenable.com,fake2.tenable.com',
@@ -49,10 +49,10 @@ class TestExclusionsApi(BaseTest):
 
         yield exclusion
 
-        client.exclusions.delete(exclusion.id)
+        client.exclusions_api.delete(exclusion.id)
 
     def test_create_list_delete(self, app, client):
-        new_exclusion = client.exclusions.create(
+        new_exclusion = client.exclusions_api.create(
             ExclusionCreateRequest(
                 app.session_name('test_exclusions_list'),
                 u'fake.tenable.com'
@@ -60,7 +60,7 @@ class TestExclusionsApi(BaseTest):
         )
         assert isinstance(new_exclusion, Exclusion), u'The `create` method returns type.'
 
-        exclusion_list = client.exclusions.list()
+        exclusion_list = client.exclusions_api.list()
 
         assert isinstance(exclusion_list, ExclusionList), u'The `list` method returns type.'
 
@@ -69,12 +69,12 @@ class TestExclusionsApi(BaseTest):
         for e in exclusion_list.exclusions:
             assert isinstance(e, Exclusion), u'The `list` method returns model list.'
 
-        assert client.exclusions.delete(new_exclusion.id), u'The `delete` method is successful.'
+        assert client.exclusions_api.delete(new_exclusion.id), u'The `delete` method is successful.'
         assert self._get_exclusion_from_exclusion_list(client, new_exclusion.id) is None, \
             u'The deleted exclusion cannot be present.'
 
     def test_details(self, client, exclusion):
-        exclusion_details = client.exclusions.details(exclusion.id)
+        exclusion_details = client.exclusions_api.details(exclusion.id)
         assert isinstance(exclusion_details, Exclusion), u'The `details` method returns type.'
 
     def test_edit(self, app, client, exclusion):
@@ -83,7 +83,7 @@ class TestExclusionsApi(BaseTest):
             edited_exclusion_name,
             exclusion.members
         )
-        edited_exclusion = client.exclusions.edit(exclusion.id, edit_request)
+        edited_exclusion = client.exclusions_api.edit(exclusion.id, edit_request)
         assert isinstance(edited_exclusion, Exclusion), u'The `edit` method returns type.'
         assert edited_exclusion.id == exclusion.id, u'Must be the same exclusion.'
         assert edited_exclusion.name == edited_exclusion_name, u'Exclusion name has to be edited.'
@@ -92,12 +92,12 @@ class TestExclusionsApi(BaseTest):
             exclusion.name,
             exclusion.members
         )
-        reverted_exclusion = client.exclusions.edit(exclusion.id, revert_request)
+        reverted_exclusion = client.exclusions_api.edit(exclusion.id, revert_request)
         assert isinstance(reverted_exclusion, Exclusion), u'The `edit` method returns type.'
         assert reverted_exclusion.name == exclusion.name, u'Exclusion is reverted.'
 
     @staticmethod
     def _get_exclusion_from_exclusion_list(client, exclusion_id):
-        exclusion_list = client.exclusions.list()
+        exclusion_list = client.exclusions_api.list()
         matching_exclusion = [e for e in exclusion_list.exclusions if e.id == exclusion_id]
         return matching_exclusion[0] if len(matching_exclusion) > 0 else None

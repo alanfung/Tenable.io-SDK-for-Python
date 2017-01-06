@@ -14,5 +14,5 @@ class TestFileApi(BaseTest):
         yield file
 
     def test_upload(self, client, file):
-        uploaded_file_name = client.file.upload(file)
+        uploaded_file_name = client.file_api.upload(file)
         assert file.name in uploaded_file_name
