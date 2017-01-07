@@ -18,6 +18,7 @@ from nessus.api.scans import ScansApi
 from nessus.api.server import ServerApi
 from nessus.api.session import SessionApi
 from nessus.api.users import UsersApi
+from nessus.helpers.folder import FolderHelper
 from nessus.helpers.scan import ScanHelper
 from nessus.util import Logger
 
@@ -66,6 +67,7 @@ class NessusClient(object):
         Initialize all helpers.
         """
         self.scan_helper = ScanHelper(self)
+        self.folder_helper = FolderHelper(self)
 
     def _retry(f):
         """

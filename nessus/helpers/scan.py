@@ -21,14 +21,15 @@ class ScanHelper(object):
     def __init__(self, client):
         self._client = client
 
-    def scans(self, name_regex=None, name=None):
+    def scans(self, name_regex=None, name=None, folder_id=None):
         """
         Get scans.
         :param name: A string to match scans with, default to None. Ignored if the `name_regex` argument is passed.
         :param name_regex: A regular expression to match scans' names with, default to None.
+        :param folder_id: Only scans in the folder identified by `folder_id`, default to None.
         :return: A list of ScanRef.
         """
-        scans = self._client.scans_api.list().scans
+        scans = self._client.scans_api.list(folder_id=folder_id).scans
         if name_regex:
             name_regex = re.compile(name_regex)
             scans = [scan for scan in scans if name_regex.match(scan.name)]
@@ -45,12 +46,18 @@ class ScanHelper(object):
         scan_detail = self._client.scans_api.details(id)
         return ScanRef(self._client, scan_detail.info.object_id)
 
-    def stop_all(self):
+    def stop_all(self, folder=None, folder_id=None):
         """
         Stop all scans.
+        :param folder: Instance of FolderRef. Stop all scan in the folder only. Default to None.
+        :param folder_id: Stop all scan in the folder identified by folder_id only. Default to None.
         :return: The current instance of ScanHelper.
         """
-        scans = self.scans()
+        from nessus.helpers.folder import FolderRef
+        if folder_id is None and isinstance(folder, FolderRef):
+            folder_id = folder.id
+
+        scans = self.scans(folder_id=folder_id)
         for scan in scans:
             try:
                 # Send stop requests for all scans first before waiting for it to be fully stopped.
@@ -205,6 +212,35 @@ class ScanRef(object):
         """
         return self.details(history_id=history_id).info.name
 
+    def folder(self, history_id=None):
+        """
+        Get the folder the scan is in.
+        :param history_id: The scan history to get folder for, None for most recent. Default to None.
+        :return: An instance of FolderRef.
+        """
+        from nessus.helpers.folder import FolderRef
+        return FolderRef(self._client, self.details(history_id=history_id).info.folder_id)
+
+    def move_to(self, folder):
+        """
+        Move the scan to a folder.
+        :param folder: An instance of FolderRef identifying the folder to move the scan to.
+        :return: The same ScanRef instance.
+        """
+        from nessus.helpers.folder import FolderRef
+        assert isinstance(folder, FolderRef)
+        self._client.scans_api.folder(self.id, folder.id)
+        return self
+
+    def trash(self):
+        """
+        Move the scan into the trash folder.
+        :return: The same ScanRef instance.
+        """
+        trash_folder = self._client.folder_helper.trash_folder()
+        self.move_to(trash_folder)
+        return self
+
     def pause(self, wait=True):
         """
         Pause the scan.
@@ -248,6 +284,14 @@ class ScanRef(object):
             self.wait_until_stopped()
         return self
 
+    def stopped(self, history_id=None):
+        """
+        Check if the scan is stopped.
+        :param history_id: The scan history to check, None for most recent. Default to None.
+        :return: True if stopped, False otherwise.
+        """
+        return self.status(history_id=history_id) in ScanHelper.STATUSES_STOPPED
+
     def wait_or_cancel_after(self, seconds):
         """
         Blocks until the scan is stopped, or cancel if it isn't stopped within the specified seconds.
@@ -255,8 +299,8 @@ class ScanRef(object):
         :return: The same ScanRef instance.
         """
         start_time = time.time()
-        self._wait_until(lambda: time.time() - start_time > seconds or self.status() in ScanHelper.STATUSES_STOPPED)
-        if self.status() not in ScanHelper.STATUSES_STOPPED:
+        self._wait_until(lambda: time.time() - start_time > seconds or self.stopped())
+        if not self.stopped():
             self.stop()
         return self
 
@@ -266,7 +310,7 @@ class ScanRef(object):
         :param history_id: The scan history to wait for, None for most recent. Default to None.
         :return: The same ScanRef instance.
         """
-        self._wait_until(lambda: self.status(history_id=history_id) in ScanHelper.STATUSES_STOPPED)
+        self._wait_until(lambda: self.stopped(history_id=history_id))
         return self
 
     @staticmethod
