@@ -130,14 +130,18 @@ class ScansApi(BaseApi):
         response = self._client.post('scans/import', scan_import)
         return loads(response.text).get('scan', {}).get('id')
 
-    def launch(self, scan_id):
+    def launch(self, scan_id, scan_launch_request):
         """Launch a scan.
 
         :param scan_id: The scan ID.
+        :param scan_launch_request: An instance of :class:`ScanLaunchRequest`.
         :raise NessusApiException:  When API error is encountered.
         :return: The scan uuid.
         """
-        response = self._client.post('scans/%(scan_id)s/launch', {}, path_params={'scan_id': scan_id})
+        assert isinstance(scan_launch_request, ScanLaunchRequest)
+        response = self._client.post('scans/%(scan_id)s/launch',
+                                     scan_launch_request,
+                                     path_params={'scan_id': scan_id})
         return loads(response.text).get('scan_uuid')
 
     def list(self, folder_id=None):
@@ -260,3 +264,12 @@ class ScanImportRequest(BaseRequest):
         self.file = file
         self.folder_id = folder_id
         self.password = password
+
+
+class ScanLaunchRequest(BaseRequest):
+
+    def __init__(
+            self,
+            alt_targets=None
+    ):
+        self.alt_targets = alt_targets

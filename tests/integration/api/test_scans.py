@@ -3,7 +3,8 @@ import pytest
 
 from nessus.exceptions import NessusApiException
 from nessus.api.models import Folder, Scan, ScanList, ScanSettings
-from nessus.api.scans import ScansApi, ScanConfigureRequest, ScanCreateRequest, ScanExportRequest, ScanImportRequest
+from nessus.api.scans import ScansApi, ScanConfigureRequest, ScanCreateRequest, ScanExportRequest, ScanImportRequest,\
+                             ScanLaunchRequest
 
 from tests.base import BaseTest
 from tests.config import NessusTestConfig
@@ -76,7 +77,10 @@ class TestScansApi(BaseTest):
             u'Scan is in idling state.'
 
         # Launch the scan.
-        client.scans_api.launch(scan_id)
+        client.scans_api.launch(
+            scan_id,
+            ScanLaunchRequest()
+        )
         scan_details = client.scans_api.details(scan_id)
         assert scan_details.info.status in [Scan.STATUS_PENDING, Scan.STATUS_RUNNING], u'Scan is in launched state.'
 
@@ -115,7 +119,10 @@ class TestScansApi(BaseTest):
     def test_export_import(self, app, client, scan_id):
 
         # Cannot export on a test that has never been launched, therefore launch the scan first.
-        client.scans_api.launch(scan_id)
+        client.scans_api.launch(
+            scan_id,
+            ScanLaunchRequest()
+        )
         self.wait_until(lambda: client.scans_api.details(scan_id),
                         lambda details: details.info.status in [Scan.STATUS_COMPLETED, Scan.STATUS_RUNNING])
 
