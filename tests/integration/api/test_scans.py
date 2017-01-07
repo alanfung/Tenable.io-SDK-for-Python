@@ -2,8 +2,8 @@ import os
 import pytest
 
 from nessus.exceptions import NessusApiException
-from nessus.api.models import Scan, ScanList, ScanSettings
-from nessus.api.scans import ScansApi, ScanCreateRequest, ScanExportRequest, ScanImportRequest
+from nessus.api.models import Folder, Scan, ScanList, ScanSettings
+from nessus.api.scans import ScansApi, ScanConfigureRequest, ScanCreateRequest, ScanExportRequest, ScanImportRequest
 
 from tests.base import BaseTest
 from tests.config import NessusTestConfig
@@ -49,6 +49,22 @@ class TestScansApi(BaseTest):
                             lambda details: details.info.status in [
                                 Scan.STATUS_CANCELED, Scan.STATUS_COMPLETED, Scan.STATUS_EMPTY])
             client.scans_api.delete(scan_id)
+
+    @pytest.fixture(scope='class')
+    def folder_id(self, app, client):
+        folder_id = client.folders_api.create(app.session_name('test_scans', length=5))
+        yield folder_id
+        client.folders_api.delete(folder_id)
+
+    @pytest.fixture(scope='class')
+    def main_folder_id(self, client):
+        folder_list = client.folders_api.list()
+        main_folder_id = None
+        for f in folder_list.folders:
+            if f.type == Folder.TYPE_MAIN:
+                main_folder_id = f.id
+        assert main_folder_id is not None, u'Main folder exists.'
+        yield main_folder_id
 
     def test_list_return_correct_type(self, client):
         scan = client.scans_api.list()
@@ -152,3 +168,44 @@ class TestScansApi(BaseTest):
         client.scans_api.delete(scan.id)
         with pytest.raises(NessusApiException):
             client.scans_api.details(scan.id)
+
+    def test_configure(self, app, client, scan_id):
+        scan_details = client.scans_api.details(scan_id)
+
+        before_name = scan_details.info.name
+        after_name = app.session_name('test_scans_config', length=3)
+
+        client.scans_api.configure(scan_id, ScanConfigureRequest(
+            settings=ScanSettings(
+                name=after_name,
+                text_targets=NessusTestConfig.get('scan_template_name')
+            )
+        ))
+
+        scan_details = client.scans_api.details(scan_id)
+        assert scan_details.info.name == after_name, u'Name is reconfigured.'
+
+        client.scans_api.configure(scan_id, ScanConfigureRequest(
+            settings=ScanSettings(
+                name=before_name,
+                text_targets=NessusTestConfig.get('scan_template_name')
+            )
+        ))
+
+        scan_details = client.scans_api.details(scan_id)
+        assert scan_details.info.name == before_name, u'Name is reverted.'
+
+    def test_folder(self, client, scan_id, folder_id, main_folder_id):
+        scan_details = client.scans_api.details(scan_id)
+
+        # When scan is just created, it can have None as folder_id which the API considers it in the main folder.
+        before_folder_id = scan_details.info.folder_id or main_folder_id
+        after_folder_id = folder_id
+
+        client.scans_api.folder(scan_id, after_folder_id)
+        scan_details = client.scans_api.details(scan_id)
+        assert scan_details.info.folder_id == after_folder_id, u'Scan is moved to the new folder.'
+
+        client.scans_api.folder(scan_id, before_folder_id)
+        scan_details = client.scans_api.details(scan_id)
+        assert scan_details.info.folder_id == before_folder_id, u'Scan is returned to the previous folder.'

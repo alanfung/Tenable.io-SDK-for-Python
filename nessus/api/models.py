@@ -215,6 +215,11 @@ class ExclusionRrules(BaseModel):
 
 
 class Folder(BaseModel):
+
+    TYPE_CUSTOM = 'custom'
+    TYPE_MAIN = 'main'
+    TYPE_TRASH = 'trash'
+
     def __init__(
             self,
             id=None,
