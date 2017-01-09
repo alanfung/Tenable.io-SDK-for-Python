@@ -9,6 +9,17 @@ class ScansApi(BaseApi):
 
     STATUS_EXPORT_READY = u'ready'
 
+    def configure(self, scan_id, scan_configure):
+        """Configure an existing scan.
+
+        :param scan_id:
+        :param scan_configure: An instance of :class:`ScanConfigureRequest`.
+        :raise NessusApiException:  When API error is encountered.
+        :return: The ID of scan just configured.
+        """
+        response = self._client.put('scans/%(scan_id)s', scan_configure, path_params={'scan_id': scan_id})
+        return loads(response.text).get('scan', {}).get('id')
+
     def create(self, scan_create):
         """Create a scan.
 
@@ -96,6 +107,19 @@ class ScansApi(BaseApi):
                                     path_params={'scan_id': scan_id, 'file_id': file_id})
         return loads(response.text).get('status')
 
+    def folder(self, scan_id, folder_id):
+        """Move to a scan to a folder.
+
+        :param scan_id: The scan ID.
+        :param folder_id: The folder ID.
+        :raise NessusApiException:  When API error is encountered.
+        :return: True if successful.
+        """
+        self._client.put('scans/%(scan_id)s/folder',
+                         {'folder_id': folder_id},
+                         path_params={'scan_id': scan_id})
+        return True
+
     def import_scan(self, scan_import):
         """Import an existing scan which has been uploaded using :func:`Nessus.FileApi.upload`
 
@@ -116,13 +140,13 @@ class ScansApi(BaseApi):
         response = self._client.post('scans/%(scan_id)s/launch', {}, path_params={'scan_id': scan_id})
         return loads(response.text).get('scan_uuid')
 
-    def list(self):
+    def list(self, folder_id=None):
         """Return the scan list.
 
         :raise NessusApiException:  When API error is encountered.
         :return: An instance of :class:`nessus.api.models.ScanList`.
         """
-        response = self._client.get('scans')
+        response = self._client.get('scans', params={'folder_id': folder_id} if folder_id else {})
         return ScanList.from_json(response.text)
 
     def pause(self, scan_id):
@@ -156,7 +180,7 @@ class ScansApi(BaseApi):
         return True
 
 
-class ScanCreateRequest(BaseRequest):
+class ScanSaveRequest(BaseRequest):
 
     def __init__(
             self,
@@ -168,10 +192,32 @@ class ScanCreateRequest(BaseRequest):
         self.settings = settings
 
     def as_payload(self, filter_=None):
-        return {
-            'uuid': self.uuid,
-            'settings': self.settings.as_payload(True)
-        }
+        payload = super(ScanSaveRequest, self).as_payload(True)
+        if isinstance(self.settings, ScanSettings):
+            payload.__setitem__('settings', self.settings.as_payload())
+        else:
+            payload.pop('settings', None)
+        return payload
+
+
+class ScanCreateRequest(ScanSaveRequest):
+
+    def __init__(
+            self,
+            uuid,
+            settings=None,
+    ):
+        super(ScanCreateRequest, self).__init__(uuid, settings)
+
+
+class ScanConfigureRequest(ScanSaveRequest):
+
+    def __init__(
+            self,
+            uuid=None,
+            settings=None,
+    ):
+        super(ScanConfigureRequest, self).__init__(uuid, settings)
 
 
 class ScanExportRequest(BaseRequest):
