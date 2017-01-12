@@ -4,6 +4,7 @@ from datetime import datetime
 from time import time
 
 from nessus.api.models import Scan
+from nessus.api.scans import ScanExportRequest
 from nessus.client import NessusClient
 from nessus.exceptions import NessusApiException
 
@@ -12,7 +13,8 @@ def example(test_name, test_file):
 
     # Generate unique name and file.
     scan_name = test_name(u'my test scan')
-    test_file_output = test_file(u'my_test_report.pdf')
+    test_nessus_file = test_file(u'my_test_report.nessus')
+    test_pdf_file = test_file(u'my_test_report.pdf')
 
     '''
     Instantiate an instance of the NessusClient.
@@ -52,9 +54,9 @@ def example(test_name, test_file):
     Launch a scan, then download when scan is completed.
     Note: The `download` method blocks until the scan is completed and the report is downloaded.
     '''
-    scan.launch().download(test_file_output)
-    assert os.path.isfile(test_file_output)
-    os.remove(test_file_output)
+    scan.launch().download(test_pdf_file)
+    assert os.path.isfile(test_pdf_file)
+    os.remove(test_pdf_file)
 
     '''
     Launch a scan, pause it, resume it, then stop it.
@@ -81,9 +83,9 @@ def example(test_name, test_file):
     '''
     Download the report for a specific scan in history.
     '''
-    scan.download(test_file_output, history_id=histories[0].history_id)
-    assert os.path.isfile(test_file_output)
-    os.remove(test_file_output)
+    scan.download(test_pdf_file, history_id=histories[0].history_id)
+    assert os.path.isfile(test_pdf_file)
+    os.remove(test_pdf_file)
 
     '''
     Create a new scan by copying a scan.
@@ -91,6 +93,19 @@ def example(test_name, test_file):
     scan_copy = scan.copy()
     assert scan_copy.id != scan.id
     assert scan_copy.status() == Scan.STATUS_EMPTY
+
+    '''
+    Export a scan into a NESSUS file.
+    '''
+    scan.download(test_nessus_file, format=ScanExportRequest.FORMAT_NESSUS)
+    assert os.path.isfile(test_nessus_file)
+
+    '''
+    Create a new scan by importing a NESSUS file.
+    '''
+    imported_scan = client.scan_helper.import_scan(test_nessus_file)
+    assert imported_scan.details().info.name == scan.details().info.name
+    os.remove(test_nessus_file)
 
     '''
     Stop all scans.
@@ -103,6 +118,8 @@ def example(test_name, test_file):
     '''
     scan.delete()
     scan_copy.delete()
+    imported_scan.delete()
+
     try:
         scan.details()
         assert False
@@ -110,6 +127,11 @@ def example(test_name, test_file):
         pass
     try:
         scan_copy.details()
+        assert False
+    except NessusApiException:
+        pass
+    try:
+        imported_scan.details()
         assert False
     except NessusApiException:
         pass

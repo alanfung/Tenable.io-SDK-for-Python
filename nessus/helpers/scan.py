@@ -1,10 +1,11 @@
+import os
 import re
 import time
 
 from datetime import datetime
 
 from nessus.api.models import Scan, ScanSettings, Template
-from nessus.api.scans import ScansApi, ScanCreateRequest, ScanExportRequest
+from nessus.api.scans import ScansApi, ScanCreateRequest, ScanExportRequest, ScanImportRequest
 from nessus.exceptions import NessusException
 
 
@@ -122,6 +123,22 @@ class ScanHelper(object):
                     break
 
         return template
+
+    def import_scan(self, path):
+        """
+        Uploads and then imports scan report.
+        :param path: Path of the scan report.
+        :return: ScanRef referenced by id if exists.
+        """
+        if not os.path.isfile(path):
+            raise NessusException(u'File does not exist at path.')
+
+        with open(path, 'rb') as upload_file:
+            upload_file_name = self._client.file_api.upload(upload_file)
+
+        imported_scan_id = self._client.scans_api.import_scan(ScanImportRequest(upload_file_name))
+
+        return self.id(imported_scan_id)
 
 
 class ScanRef(object):
