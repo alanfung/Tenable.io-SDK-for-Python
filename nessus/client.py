@@ -20,6 +20,7 @@ from nessus.api.server import ServerApi
 from nessus.api.session import SessionApi
 from nessus.api.users import UsersApi
 from nessus.helpers.folder import FolderHelper
+from nessus.helpers.policy import PolicyHelper
 from nessus.helpers.scan import ScanHelper
 from nessus.util import Logger
 
@@ -68,6 +69,7 @@ class NessusClient(object):
         """
         Initialize all helpers.
         """
+        self.policy_helper = PolicyHelper(self)
         self.scan_helper = ScanHelper(self)
         self.folder_helper = FolderHelper(self)
 
