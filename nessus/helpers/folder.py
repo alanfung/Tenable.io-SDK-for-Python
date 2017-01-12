@@ -91,6 +91,8 @@ class FolderRef(object):
         :return: The same instance of FolderRef.
         """
         assert scan_id is not None or isinstance(scan, ScanRef)
+        if scan_id is not None:
+            scan = ScanRef(self._client, scan_id)
         scan.move_to(self)
         return self
 
