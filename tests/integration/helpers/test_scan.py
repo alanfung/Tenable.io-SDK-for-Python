@@ -3,7 +3,6 @@ import pytest
 from time import time
 
 from nessus.api.scans import ScanExportRequest
-from nessus.helpers.scan import ScanHelper
 
 from tests.base import BaseTest
 from tests.config import NessusTestConfig
@@ -27,11 +26,16 @@ class TestScanHelper(BaseTest):
         scan_detail = scan.details()
         assert scan_detail.info.object_id == scan.id, u'ScanRef `id` should match ID in ScanDetail.'
 
-    def test_launch_stop_download_import(self, app, client, scan):
+    def test_alt_target_launch_stop_download_import(self, app, client, scan):
         download_path = app.session_file_output('test_scan_launch_download')
 
         assert not os.path.isfile(download_path), u'Scan report does not yet exist.'
-        scan.launch().stop().download(download_path, format=ScanExportRequest.FORMAT_NESSUS)
+
+        alt_targets = [NessusTestConfig.get('scan_alt_targets')]
+        histories = scan.launch(wait=True, alt_targets=alt_targets).stop()\
+            .download(download_path, format=ScanExportRequest.FORMAT_NESSUS).histories()
+
+        assert histories[0].alt_targets_used is True, u'Alternative target used in scan'
         assert os.path.isfile(download_path), u'Scan report is downloaded.'
 
         imported_scan = client.scan_helper.import_scan(download_path)

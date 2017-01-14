@@ -1,3 +1,4 @@
+import six
 import os
 import re
 import time
@@ -5,7 +6,7 @@ import time
 from datetime import datetime
 
 from nessus.api.models import Scan, ScanSettings, Template
-from nessus.api.scans import ScansApi, ScanCreateRequest, ScanExportRequest, ScanImportRequest
+from nessus.api.scans import ScansApi, ScanCreateRequest, ScanExportRequest, ScanImportRequest, ScanLaunchRequest
 from nessus.exceptions import NessusException
 
 
@@ -209,14 +210,21 @@ class ScanRef(object):
             histories = [h for h in histories if h.creation_date >= ts]
         return histories
 
-    def launch(self, wait=True):
+    def launch(self, wait=True, alt_targets=None):
         """
         Launch the scan.
-        :parma wait: If True, the method blocks until the scan's status is not
+        :param wait: If True, the method blocks until the scan's status is not
             :class:`nessus.api.models.Scan`.STATUS_PENDING. Default is False.
+        :param alt_targets: String of comma separated alternative targets or list of alternative target strings.
         :return: The same ScanRef instance.
         """
-        self._client.scans_api.launch(self.id)
+        if isinstance(alt_targets, six.string_types):
+            alt_targets = [alt_targets]
+
+        self._client.scans_api.launch(
+            self.id,
+            ScanLaunchRequest(alt_targets=alt_targets)
+        )
         if wait:
             self._wait_until(lambda: self.status() not in Scan.STATUS_PENDING)
         return self
