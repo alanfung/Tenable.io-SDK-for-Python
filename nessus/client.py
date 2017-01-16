@@ -15,6 +15,7 @@ from nessus.api.groups import GroupsApi
 from nessus.api.plugins import PluginsApi
 from nessus.api.policies import PoliciesApi
 from nessus.api.scans import ScansApi
+from nessus.api.scanners import ScannersApi
 from nessus.api.server import ServerApi
 from nessus.api.session import SessionApi
 from nessus.api.users import UsersApi
@@ -58,6 +59,7 @@ class NessusClient(object):
         self.plugins_api = PluginsApi(self)
         self.policies_api = PoliciesApi(self)
         self.scans_api = ScansApi(self)
+        self.scanners_api = ScannersApi(self)
         self.server_api = ServerApi(self)
         self.session_api = SessionApi(self)
         self.users_api = UsersApi(self)

@@ -952,6 +952,174 @@ class ScanSettings(BaseModel):
         self.text_targets = text_targets
 
 
+class Scanner(BaseModel):
+
+    def __init__(
+            self,
+            id=None,
+            uuid=None,
+            name=None,
+            type=None,
+            status=None,
+            scan_count=None,
+            engine_version=None,
+            platform=None,
+            loaded_plugin_set=None,
+            registration_code=None,
+            owner=None,
+            key=None,
+            license=None
+    ):
+        self._license = None
+
+        self.id = id
+        self.uuid = uuid
+        self.name = name
+        self.type = type
+        self.status = status
+        self.scan_count = scan_count
+        self.engine_version = engine_version
+        self.platform = platform
+        self.loaded_plugin_set = loaded_plugin_set
+        self.registration_code = registration_code
+        self.owner = owner
+        self.key = key
+        self.license = license
+
+    @property
+    def license(self):
+        return self._license
+
+    @license.setter
+    def license(self, license):
+        if isinstance(license, ScannerLicense):
+            self._license = license
+        elif isinstance(license, dict):
+            self._license = ScannerLicense.from_dict(license)
+        else:
+            self._license = None
+
+
+class ScannerAwsTarget(BaseModel):
+
+    def __init__(
+            self,
+            scanner_id=None,
+            instance_id=None,
+            private_ip=None,
+            public_ip=None,
+            state=None,
+            zone=None,
+            type=None,
+            name=None
+    ):
+        self.scanner_id = scanner_id
+        self.instance_id = instance_id
+        self.private_ip = private_ip
+        self.public_ip = public_ip
+        self.state = state
+        self.zone = zone
+        self.type = type
+        self.name = name
+
+
+class ScannerAwsTargetList(BaseModel):
+
+    def __init__(
+            self,
+            aws_targets=None
+    ):
+        self._aws_targets = None
+        self._aws_targets = aws_targets
+
+    @property
+    def aws_targets(self):
+        return self._aws_targets
+
+    @aws_targets.setter
+    @BaseModel._model_list(ScannerAwsTarget)
+    def aws_targets(self, aws_targets):
+        self.aws_targets = aws_targets
+
+
+class ScannerLicense(BaseModel):
+
+    def __init__(
+            self,
+            type=None,
+            ips=None,
+            agents=None,
+            scanners=None
+    ):
+        self.type = type
+        self.ips = ips
+        self.agents = agents
+        self.scanners = scanners
+
+
+class ScannerList(BaseModel):
+
+    def __init__(
+            self,
+            scanners=None
+    ):
+        self._scanners = None
+        self.scanners = scanners
+
+    @property
+    def scanners(self):
+        return self._scanners
+
+    @scanners.setter
+    @BaseModel._model_list(Scanner)
+    def scanners(self, scanners):
+        self._scanners = scanners
+
+
+class ScannerScan(BaseModel):
+
+    def __init__(
+            self,
+            scanner_uuid=None,
+            name=None,
+            status=None,
+            id=None,
+            scan_id=None,
+            user=None,
+            last_modification_date=None,
+            start_time=None,
+            remote=None
+    ):
+        self.scanner_uuid = scanner_uuid
+        self.name = name
+        self.status = status
+        self.id = id
+        self.scan_id = scan_id
+        self.user = user
+        self.last_modification_date = last_modification_date
+        self.start_time = start_time
+        self.remote = remote
+
+
+class ScannerScanList(BaseModel):
+
+    def __init__(
+            self,
+            scans=None
+    ):
+        self._scans = None
+        self.scans = scans
+
+    @property
+    def scans(self):
+        return self._scans
+
+    @scans.setter
+    @BaseModel._model_list(ScannerScan)
+    def scans(self, scans):
+        self._scans = scans
+
+
 class ServerProperties(BaseModel):
 
     def __init__(
