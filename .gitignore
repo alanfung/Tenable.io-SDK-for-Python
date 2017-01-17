@@ -1,6 +1,11 @@
 *.pyc
 doc/build
 
+# Wheel packaging
+build
+dist
+nessus.egg-info
+
 # Nessus config
 nessus.ini
 
