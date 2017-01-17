@@ -74,10 +74,13 @@ class ScanHelper(object):
         """
         Get scan by ID.
         :param name: The name of the Scan to be created.
-        :param text_targets: A list of scan targets separated by commas.
+        :param text_targets: A string of comma separated targets or a list of targets.
         :param template: The name or title of the template, or an instance of Template.
         :return: ScanRef referenced by id if exists.
         """
+        if isinstance(text_targets, list):
+            text_targets = ','.join(text_targets)
+
         t = template
 
         if not isinstance(t, Template):
