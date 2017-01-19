@@ -47,7 +47,7 @@ environment.
     # To use a different python bin (i.e. python3).
     $ virtualenv .venv3 -p $(which python3)
     # To active the virtualenv
-    $ source ./venv/bin/activate
+    $ source ./.venv/bin/activate
 
 Install dependencies.
 
