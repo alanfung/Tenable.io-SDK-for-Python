@@ -1,7 +1,7 @@
 from json import loads
 
-from nessus.exceptions import NessusException
-from nessus.util import payload_filter
+from tenable_io.exceptions import TenableIOException
+from tenable_io.util import payload_filter
 
 
 class BaseModel(object):
@@ -48,7 +48,7 @@ class BaseModel(object):
                         elif isinstance(item, dict):
                             model_list.append(class_.from_dict(item))
                         else:
-                            raise NessusException(u'Invalid element type.')
+                            raise TenableIOException(u'Invalid element type.')
                     f(self, model_list)
                 else:
                     f(self, [])

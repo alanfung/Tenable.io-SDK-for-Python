@@ -1,7 +1,7 @@
 import pytest
 
-from nessus.api.asset_lists import AssetListCreateRequest
-from nessus.api.models import AssetList, AssetListList
+from tenable_io.api.asset_lists import AssetListCreateRequest
+from tenable_io.api.models import AssetList, AssetListList
 from tests.base import BaseTest
 
 

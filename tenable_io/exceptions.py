@@ -1,28 +1,28 @@
-class NessusException(Exception):
+class TenableIOException(Exception):
 
     def __init__(self, message=None, code=None):
-        self.code = code if code else NessusErrorCode.GENERIC
+        self.code = code if code else TenableIOErrorCode.GENERIC
         self.message = message if message else self.code.description
 
     def __str__(self):
         return self.message
 
 
-class NessusApiException(NessusException):
+class TenableIOApiException(TenableIOException):
 
     def __init__(self, response):
         self.response = response
-        code = NessusErrorCode.from_http_code(response.status_code)
+        code = TenableIOErrorCode.from_http_code(response.status_code)
         if code:
-            super(NessusApiException, self).__init__(
+            super(TenableIOApiException, self).__init__(
                 response.text if response.text else code.description,
                 code
             )
         else:
-            super(NessusApiException, self).__init__(response.text)
+            super(TenableIOApiException, self).__init__(response.text)
 
 
-class NessusRetryableApiException(NessusApiException):
+class TenableIORetryableApiException(TenableIOApiException):
     pass
 
 
@@ -44,7 +44,7 @@ class ErrorCode(object):
         return self.description
 
 
-class NessusErrorCode(ErrorCode):
+class TenableIOErrorCode(ErrorCode):
 
     GENERIC = ErrorCode("Generic")
 

@@ -1,13 +1,13 @@
 import os
 import pytest
 
-from nessus.exceptions import NessusApiException
-from nessus.api.models import Folder, Scan, ScanList, ScanSettings
-from nessus.api.scans import ScansApi, ScanConfigureRequest, ScanCreateRequest, ScanExportRequest, ScanImportRequest,\
-                             ScanLaunchRequest
+from tenable_io.exceptions import TenableIOApiException
+from tenable_io.api.models import Folder, Scan, ScanList, ScanSettings
+from tenable_io.api.scans import ScansApi, ScanConfigureRequest, ScanCreateRequest, \
+    ScanExportRequest, ScanImportRequest, ScanLaunchRequest
 
 from tests.base import BaseTest
-from tests.config import NessusTestConfig
+from tests.config import TenableIOTestConfig
 
 
 class TestScansApi(BaseTest):
@@ -20,7 +20,7 @@ class TestScansApi(BaseTest):
         template_list = client.editor_api.list('scan')
         assert len(template_list.templates) > 0, u'At least one scan template.'
 
-        test_templates = [t for t in template_list.templates if t.name == NessusTestConfig.get('scan_template_name')]
+        test_templates = [t for t in template_list.templates if t.name == TenableIOTestConfig.get('scan_template_name')]
         assert len(test_templates) > 0, u'At least one test template.'
 
         yield test_templates[0]
@@ -35,7 +35,7 @@ class TestScansApi(BaseTest):
                 template.uuid,
                 ScanSettings(
                     app.session_name('test_scans'),
-                    NessusTestConfig.get('scan_text_targets'),
+                    TenableIOTestConfig.get('scan_text_targets'),
                 )
             )
         )
@@ -43,7 +43,7 @@ class TestScansApi(BaseTest):
 
         try:
             client.scans_api.delete(scan_id)
-        except NessusApiException:
+        except TenableIOApiException:
             # This happens when the scan is not idling.
             client.scans_api.stop(scan_id)
             self.wait_until(lambda: client.scans_api.details(scan_id),
@@ -173,7 +173,7 @@ class TestScansApi(BaseTest):
         scan = client.scans_api.copy(scan_id)
         assert scan.id != scan_id, u'Copied scan should not have same ID as the original scan.'
         client.scans_api.delete(scan.id)
-        with pytest.raises(NessusApiException):
+        with pytest.raises(TenableIOApiException):
             client.scans_api.details(scan.id)
 
     def test_configure(self, app, client, scan_id):
@@ -185,7 +185,7 @@ class TestScansApi(BaseTest):
         client.scans_api.configure(scan_id, ScanConfigureRequest(
             settings=ScanSettings(
                 name=after_name,
-                text_targets=NessusTestConfig.get('scan_template_name')
+                text_targets=TenableIOTestConfig.get('scan_template_name')
             )
         ))
 
@@ -195,7 +195,7 @@ class TestScansApi(BaseTest):
         client.scans_api.configure(scan_id, ScanConfigureRequest(
             settings=ScanSettings(
                 name=before_name,
-                text_targets=NessusTestConfig.get('scan_template_name')
+                text_targets=TenableIOTestConfig.get('scan_template_name')
             )
         ))
 

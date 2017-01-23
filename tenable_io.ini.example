@@ -1,9 +1,9 @@
-[nessus]
+[tenable_io]
 ;endpoint=https://cloud.tenable.com/
 access_key={{ACCESS_KEY}}
 secret_key={{SECRET_KEY}}
 
-[nessus-test]
+[tenable_io-test]
 ; Name of template to create a scan with.
 scan_template_name=discovery
 ; Host target to create a scan with. (Warning: do not scan targets that you're not authorized to.)

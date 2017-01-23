@@ -1,13 +1,13 @@
-from nessus.client import NessusClient
-from nessus.exceptions import NessusApiException, NessusErrorCode
+from tenable_io.client import TenableIOClient
+from tenable_io.exceptions import TenableIOApiException, TenableIOErrorCode
 from tests.base import BaseTest
 
 
-class TestNessusClient(BaseTest):
+class TestTenableIOClient(BaseTest):
 
     def test_client_bad_keys(self):
         try:
-            NessusClient('bad', 'key').session_api.get()
-            assert False, u'NessusApiException should be raised for bad api and secret keys.'
-        except NessusApiException as e:
-            assert e.code is NessusErrorCode.UNAUTHORIZED, u'Appropriate exception is raised.'
+            TenableIOClient('bad', 'key').session_api.get()
+            assert False, u'TenableIOApiException should be raised for bad api and secret keys.'
+        except TenableIOApiException as e:
+            assert e.code is TenableIOErrorCode.UNAUTHORIZED, u'Appropriate exception is raised.'

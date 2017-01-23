@@ -5,7 +5,7 @@ pipelines:
     - step:
         script:
           - pip install pep8
-          - pep8 nessus tests
+          - pep8 tenable_io tests
           - pip install j2cli
-          - j2 nessus.ini.example > nessus.ini
+          - j2 tenable_io.ini.example > tenable_io.ini
           - tox

@@ -1,6 +1,6 @@
 import pytest
 
-from nessus.api.models import FolderList
+from tenable_io.api.models import FolderList
 from tests.base import BaseTest
 
 

@@ -3,38 +3,38 @@ import requests
 from requests.utils import quote
 from time import sleep
 
-from nessus.config import NessusConfig
-from nessus.exceptions import NessusApiException, NessusRetryableApiException
-from nessus.api.asset_lists import AssetListsApi
-from nessus.api.base import BaseRequest
-from nessus.api.editor import EditorApi
-from nessus.api.exclusions import ExclusionApi
-from nessus.api.file import FileApi
-from nessus.api.folders import FoldersApi
-from nessus.api.groups import GroupsApi
-from nessus.api.plugins import PluginsApi
-from nessus.api.policies import PoliciesApi
-from nessus.api.scans import ScansApi
-from nessus.api.scanners import ScannersApi
-from nessus.api.server import ServerApi
-from nessus.api.session import SessionApi
-from nessus.api.users import UsersApi
-from nessus.helpers.folder import FolderHelper
-from nessus.helpers.policy import PolicyHelper
-from nessus.helpers.scan import ScanHelper
-from nessus.util import Logger
+from tenable_io.config import TenableIOConfig
+from tenable_io.exceptions import TenableIOApiException, TenableIORetryableApiException
+from tenable_io.api.asset_lists import AssetListsApi
+from tenable_io.api.base import BaseRequest
+from tenable_io.api.editor import EditorApi
+from tenable_io.api.exclusions import ExclusionApi
+from tenable_io.api.file import FileApi
+from tenable_io.api.folders import FoldersApi
+from tenable_io.api.groups import GroupsApi
+from tenable_io.api.plugins import PluginsApi
+from tenable_io.api.policies import PoliciesApi
+from tenable_io.api.scans import ScansApi
+from tenable_io.api.scanners import ScannersApi
+from tenable_io.api.server import ServerApi
+from tenable_io.api.session import SessionApi
+from tenable_io.api.users import UsersApi
+from tenable_io.helpers.folder import FolderHelper
+from tenable_io.helpers.policy import PolicyHelper
+from tenable_io.helpers.scan import ScanHelper
+from tenable_io.util import Logger
 
 
-class NessusClient(object):
+class TenableIOClient(object):
 
     MAX_RETRIES = 3
     RETRY_SLEEP_MILLISECONDS = 500
 
     def __init__(
             self,
-            access_key=NessusConfig.get('access_key'),
-            secret_key=NessusConfig.get('secret_key'),
-            endpoint=NessusConfig.get('endpoint'),
+            access_key=TenableIOConfig.get('access_key'),
+            secret_key=TenableIOConfig.get('secret_key'),
+            endpoint=TenableIOConfig.get('endpoint'),
     ):
         self._access_key = access_key
         self._secret_key = secret_key
@@ -75,9 +75,10 @@ class NessusClient(object):
 
     def _retry(f):
         """
-        Decorator to retry when NessusRetryableException is caught.
+        Decorator to retry when TenableIORetryableException is caught.
         :param f: Method to retry.
-        :return: A decorated method that implicitly retry the original method upon NessusRetryableException is caught.
+        :return: A decorated method that implicitly retry the original method upon \
+        TenableIORetryableException is caught.
         """
         def wrapper(*args, **kwargs):
             count = 0
@@ -88,17 +89,17 @@ class NessusClient(object):
                 retry = False
                 try:
                     return f(*args, **kwargs)
-                except NessusRetryableApiException as exception:
+                except TenableIORetryableApiException as exception:
                     count += 1
 
-                    if count <= NessusClient.MAX_RETRIES:
+                    if count <= TenableIOClient.MAX_RETRIES:
                         retry = True
-                        sleep_ms += count * NessusClient.RETRY_SLEEP_MILLISECONDS
-                        Logger.warn(u'Retry %d of %d. Sleep %dms' % (count, NessusClient.MAX_RETRIES, sleep_ms),
-                                    NessusClient)
+                        sleep_ms += count * TenableIOClient.RETRY_SLEEP_MILLISECONDS
+                        Logger.warn(u'Retry %d of %d. Sleep %dms' % (count, TenableIOClient.MAX_RETRIES, sleep_ms),
+                                    TenableIOClient)
                         sleep(sleep_ms / 1000.0)
                     else:
-                        raise NessusApiException(exception.response)
+                        raise TenableIOApiException(exception.response)
 
         return wrapper
 
@@ -106,17 +107,17 @@ class NessusClient(object):
         """
         Decorator to handle response error.
         :param f: Response returning method.
-        :return: A Response returning method that raises NessusException for error in response.
+        :return: A Response returning method that raises TenableIOException for error in response.
         """
         def wrapper(*args, **kwargs):
             response = f(*args, **kwargs)
 
             if response.status_code == 429:
-                raise NessusRetryableApiException(response)
+                raise TenableIORetryableApiException(response)
             if response.status_code in [501, 502, 503]:
-                raise NessusRetryableApiException(response)
+                raise TenableIORetryableApiException(response)
             if not 200 <= response.status_code <= 299:
-                raise NessusApiException(response)
+                raise TenableIOApiException(response)
 
             return response
         return wrapper

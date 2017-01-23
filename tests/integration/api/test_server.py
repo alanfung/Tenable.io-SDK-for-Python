@@ -1,4 +1,4 @@
-from nessus.api.models import ServerProperties, ServerStatus
+from tenable_io.api.models import ServerProperties, ServerStatus
 from tests.base import BaseTest
 
 

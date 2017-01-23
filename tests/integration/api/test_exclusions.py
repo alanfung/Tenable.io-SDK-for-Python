@@ -2,8 +2,8 @@ import pytest
 
 from datetime import datetime, timedelta
 
-from nessus.api.exclusions import ExclusionCreateRequest, ExclusionEditRequest
-from nessus.api.models import Exclusion, ExclusionList, ExclusionSchedule, ExclusionRrules
+from tenable_io.api.exclusions import ExclusionCreateRequest, ExclusionEditRequest
+from tenable_io.api.models import Exclusion, ExclusionList, ExclusionSchedule, ExclusionRrules
 
 from tests.base import BaseTest
 

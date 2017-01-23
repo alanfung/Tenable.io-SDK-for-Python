@@ -1,11 +1,11 @@
 import pytest
 
-from nessus.api.models import User, UserList
-from nessus.api.users import UserCreateRequest
-from nessus.api.users import UserEditRequest
+from tenable_io.api.models import User, UserList
+from tenable_io.api.users import UserCreateRequest
+from tenable_io.api.users import UserEditRequest
 
 from tests.base import BaseTest
-from tests.config import NessusTestConfig
+from tests.config import TenableIOTestConfig
 
 
 class TestUsersApi(BaseTest):
@@ -13,7 +13,7 @@ class TestUsersApi(BaseTest):
     @pytest.fixture(scope='class')
     def user_id(self, app, client):
         new_user = client.users_api.create(UserCreateRequest(
-            username=app.session_name(u'test_users+%%s@%s' % NessusTestConfig.get('users_domain_name')),
+            username=app.session_name(u'test_users+%%s@%s' % TenableIOTestConfig.get('users_domain_name')),
             name='test_users',
             password='test_users',
             permissions="16",
@@ -43,7 +43,7 @@ class TestUsersApi(BaseTest):
 
     def test_users_create(self, app, client):
         new_user_id = client.users_api.create(UserCreateRequest(
-            username=app.session_name(u'test_users_create+%%s@%s' % NessusTestConfig.get('users_domain_name')),
+            username=app.session_name(u'test_users_create+%%s@%s' % TenableIOTestConfig.get('users_domain_name')),
             name='test_users_create',
             password='test_users_create',
             permissions='16',

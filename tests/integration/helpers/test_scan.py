@@ -2,10 +2,10 @@ import os
 import pytest
 from time import time
 
-from nessus.api.scans import ScanExportRequest
+from tenable_io.api.scans import ScanExportRequest
 
 from tests.base import BaseTest
-from tests.config import NessusTestConfig
+from tests.config import TenableIOTestConfig
 
 
 class TestScanHelper(BaseTest):
@@ -17,8 +17,8 @@ class TestScanHelper(BaseTest):
         """
         scan = client.scan_helper.create(
             app.session_name('test_scan'),
-            NessusTestConfig.get('scan_text_targets'),
-            NessusTestConfig.get('scan_template_name'))
+            TenableIOTestConfig.get('scan_text_targets'),
+            TenableIOTestConfig.get('scan_template_name'))
         yield scan
         scan.delete()
 
@@ -31,7 +31,7 @@ class TestScanHelper(BaseTest):
 
         assert not os.path.isfile(download_path), u'Scan report does not yet exist.'
 
-        alt_targets = [NessusTestConfig.get('scan_alt_targets')]
+        alt_targets = [TenableIOTestConfig.get('scan_alt_targets')]
         histories = scan.launch(wait=True, alt_targets=alt_targets).stop()\
             .download(download_path, format=ScanExportRequest.FORMAT_NESSUS).histories()
 

@@ -3,10 +3,10 @@ import os
 from datetime import datetime
 from time import time
 
-from nessus.api.models import Scan
-from nessus.api.scans import ScanExportRequest
-from nessus.client import NessusClient
-from nessus.exceptions import NessusApiException
+from tenable_io.api.models import Scan
+from tenable_io.api.scans import ScanExportRequest
+from tenable_io.client import TenableIOClient
+from tenable_io.exceptions import TenableIOApiException
 
 
 def example(test_name, test_file):
@@ -17,9 +17,9 @@ def example(test_name, test_file):
     test_pdf_file = test_file(u'my_test_report.pdf')
 
     '''
-    Instantiate an instance of the NessusClient.
+    Instantiate an instance of the TenableIOClient.
     '''
-    client = NessusClient()
+    client = TenableIOClient()
 
     '''
     Create a scan.
@@ -123,15 +123,15 @@ def example(test_name, test_file):
     try:
         scan.details()
         assert False
-    except NessusApiException:
+    except TenableIOApiException:
         pass
     try:
         scan_copy.details()
         assert False
-    except NessusApiException:
+    except TenableIOApiException:
         pass
     try:
         imported_scan.details()
         assert False
-    except NessusApiException:
+    except TenableIOApiException:
         pass

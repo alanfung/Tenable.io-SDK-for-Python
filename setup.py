@@ -7,9 +7,9 @@ with open(path.join(here, 'README.rst')) as file:
     long_description = file.read()
 
 setup(
-    name='nessus',
+    name='tenable_io',
     version='0.0',
-    description='Tenable Nessus API SDK',
+    description='Tenable.io API SDK',
     long_description=long_description,
     author='Code Particle',
     packages=find_packages(exclude=['doc', 'tests*']),

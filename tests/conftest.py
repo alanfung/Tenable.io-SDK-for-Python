@@ -3,7 +3,7 @@ import pytest
 import shutil
 import uuid
 
-from nessus.client import NessusClient
+from tenable_io.client import TenableIOClient
 
 
 class App:
@@ -36,4 +36,4 @@ def app():
 
 @pytest.fixture(scope='session')
 def client():
-    yield NessusClient()
+    yield TenableIOClient()

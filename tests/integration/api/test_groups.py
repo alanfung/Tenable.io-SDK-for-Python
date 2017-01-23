@@ -1,7 +1,7 @@
 import pytest
 
 from tests.base import BaseTest
-from nessus.api.models import Group, User
+from tenable_io.api.models import Group
 
 
 class TestGroupsApi(BaseTest):

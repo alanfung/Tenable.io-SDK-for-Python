@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
-# Tenable Nessus SDK documentation build configuration file, created by
-# sphinx-quickstart on Wed Dec 21 12:10:11 2016.
+# Tenable.io SDK documentation build configuration file, created by
+# sphinx-quickstart on Tue Jan 24 12:16:19 2017.
 #
 # This file is execfile()d with the current directory set to its
 # containing dir.
@@ -45,8 +45,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Tenable Nessus SDK'
-copyright = u'2016, Code Particle'
+project = u'Tenable.io SDK'
+copyright = u'2017, Code Particle'
 author = u'Code Particle'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -69,6 +69,7 @@ language = None
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
 exclude_patterns = ['tests*']
+
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
 
@@ -98,7 +99,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'TenableNessusSDKdoc'
+htmlhelp_basename = 'TenableioSDKdoc'
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -125,7 +126,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'TenableNessusSDK.tex', u'Tenable Nessus SDK Documentation',
+    (master_doc, 'TenableioSDK.tex', u'Tenable.io SDK Documentation',
      u'Code Particle', 'manual'),
 ]
 
@@ -135,7 +136,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'tenablenessussdk', u'Tenable Nessus SDK Documentation',
+    (master_doc, 'tenableiosdk', u'Tenable.io SDK Documentation',
      [author], 1)
 ]
 
@@ -146,10 +147,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'TenableNessusSDK', u'Tenable Nessus SDK Documentation',
-     author, 'TenableNessusSDK', 'One line description of project.',
+    (master_doc, 'TenableioSDK', u'Tenable.io SDK Documentation',
+     author, 'TenableioSDK', 'One line description of project.',
      'Miscellaneous'),
 ]
-
-
-
