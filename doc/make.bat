@@ -9,7 +9,7 @@ if "%SPHINXBUILD%" == "" (
 )
 set SOURCEDIR=source
 set BUILDDIR=build
-set SPHINXPROJ=TenableNessusSDK
+set SPHINXPROJ=TenableioSDK
 
 if "%1" == "" goto help
 

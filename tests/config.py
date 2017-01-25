@@ -8,14 +8,14 @@ else:
 base_config = {
 }
 
-# Read nessus.ini config. Default to environment variables if exist.
+# Read tenable_io.ini config. Default to environment variables if exist.
 config = configparser.SafeConfigParser(base_config)
-config.add_section('nessus-test')
-config.read('nessus.ini')
+config.add_section('tenable_io-test')
+config.read('tenable_io.ini')
 
 
-class NessusTestConfig(object):
+class TenableIOTestConfig(object):
 
     @staticmethod
     def get(key):
-        return config.get('nessus-test', key)
+        return config.get('tenable_io-test', key)

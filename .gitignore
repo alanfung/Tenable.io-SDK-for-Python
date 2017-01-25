@@ -4,10 +4,10 @@ doc/build
 # Wheel packaging
 build
 dist
-nessus.egg-info
+tenable_io.egg-info
 
-# Nessus config
-nessus.ini
+# TenableIO config
+tenable_io.ini
 
 # Test state / virtualenvs
 .cache

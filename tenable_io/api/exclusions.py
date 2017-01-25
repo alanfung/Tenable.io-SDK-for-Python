@@ -1,5 +1,5 @@
-from nessus.api.base import BaseApi, BaseRequest
-from nessus.api.models import Exclusion, ExclusionList, ExclusionSchedule
+from tenable_io.api.base import BaseApi, BaseRequest
+from tenable_io.api.models import Exclusion, ExclusionList, ExclusionSchedule
 
 
 class ExclusionApi(BaseApi):
@@ -8,8 +8,8 @@ class ExclusionApi(BaseApi):
         """Create a new exclusion
 
         :param exclusion_create: An instance of :class:`ExclusionCreateRequest`.
-        :raise NessusApiException:  When API error is encountered.
-        :return: An instance of :class:`nessus.api.models.Exclusion`.
+        :raise TenableIOApiException:  When API error is encountered.
+        :return: An instance of :class:`tenable_io.api.models.Exclusion`.
         """
         response = self._client.post('exclusions', exclusion_create)
         return Exclusion.from_json(response.text)
@@ -18,7 +18,7 @@ class ExclusionApi(BaseApi):
         """Delete an exclusion
 
         :param list_id: The exclusion ID.
-        :raise NessusApiException:  When API error is encountered.
+        :raise TenableIOApiException:  When API error is encountered.
         :return: True if successful.
         """
         self._client.delete('exclusions/%(list_id)s', path_params={'list_id': list_id})
@@ -28,8 +28,8 @@ class ExclusionApi(BaseApi):
         """Return details of given exclusion
 
         :param list_id: The exclusion ID.
-        :raise NessusApiException:  When API error is encountered.
-        :return: An instance of :class:`nessus.api.models.Exclusion`.
+        :raise TenableIOApiException:  When API error is encountered.
+        :return: An instance of :class:`tenable_io.api.models.Exclusion`.
         """
         response = self._client.get('exclusions/%(list_id)s', path_params={'list_id': list_id})
         return Exclusion.from_json(response.text)
@@ -39,8 +39,8 @@ class ExclusionApi(BaseApi):
 
         :param list_id: The exclusion ID.
         :param exclusion_edit: An instance of :class:`ExclusionEditRequest`.
-        :raise NessusApiException:  When API error is encountered.
-        :return: An instance of :class:`nessus.api.models.Exclusion`.
+        :raise TenableIOApiException:  When API error is encountered.
+        :return: An instance of :class:`tenable_io.api.models.Exclusion`.
         """
         response = self._client.put('exclusions/%(list_id)s', exclusion_edit, path_params={'list_id': list_id})
         return Exclusion.from_json(response.text)
@@ -48,8 +48,8 @@ class ExclusionApi(BaseApi):
     def list(self):
         """Return the current exclusions
 
-        :raise NessusApiException:  When API error is encountered.
-        :return: An instance of :class:`nessus.api.models.ExclusionList`.
+        :raise TenableIOApiException:  When API error is encountered.
+        :return: An instance of :class:`tenable_io.api.models.ExclusionList`.
         """
         response = self._client.get('exclusions')
         return ExclusionList.from_json(response.text)

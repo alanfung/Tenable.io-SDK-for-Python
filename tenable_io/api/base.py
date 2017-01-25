@@ -1,4 +1,4 @@
-from nessus.util import payload_filter
+from tenable_io.util import payload_filter
 
 
 class BaseApi(object):

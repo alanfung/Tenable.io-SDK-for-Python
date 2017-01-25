@@ -2,7 +2,7 @@ import os
 
 from json import loads
 
-from nessus.api.base import BaseApi
+from tenable_io.api.base import BaseApi
 
 
 class FileApi(BaseApi):
@@ -11,7 +11,7 @@ class FileApi(BaseApi):
         """Upload a file
 
         :param file: An instance of file object
-        :raise NessusApiException:  When API error is encountered.
+        :raise TenableIOApiException:  When API error is encountered.
         :return: The name of the uploaded file.
         """
         response = self._client.post('file/upload', files={'Filedata': (os.path.basename(file.name), file)})

@@ -1,9 +1,9 @@
 import pytest
 
-from nessus.api.models import Folder
+from tenable_io.api.models import Folder
 
 from tests.base import BaseTest
-from tests.config import NessusTestConfig
+from tests.config import TenableIOTestConfig
 
 
 class TestFolderHelper(BaseTest):
@@ -15,8 +15,8 @@ class TestFolderHelper(BaseTest):
         """
         scan = client.scan_helper.create(
             app.session_name('test_folder'),
-            NessusTestConfig.get('scan_text_targets'),
-            NessusTestConfig.get('scan_template_name'))
+            TenableIOTestConfig.get('scan_text_targets'),
+            TenableIOTestConfig.get('scan_template_name'))
         yield scan
         scan.delete()
 

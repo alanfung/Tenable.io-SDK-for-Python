@@ -1,5 +1,5 @@
-from nessus.api.base import BaseApi
-from nessus.api.models import PluginDetails, PluginFamilyDetails, PluginFamilyList
+from tenable_io.api.base import BaseApi
+from tenable_io.api.models import PluginDetails, PluginFamilyDetails, PluginFamilyList
 
 
 class PluginsApi(BaseApi):
@@ -7,8 +7,8 @@ class PluginsApi(BaseApi):
     def families(self):
         """Return list of plugin families.
 
-        :raise NessusApiException:  When API error is encountered.
-        :return: An instance of :class:`nessus.api.models.PluginFamilyList`.
+        :raise TenableIOApiException:  When API error is encountered.
+        :return: An instance of :class:`tenable_io.api.models.PluginFamilyList`.
         """
         response = self._client.get('plugins/families')
         return PluginFamilyList.from_json(response.text)
@@ -17,8 +17,8 @@ class PluginsApi(BaseApi):
         """Return plugin family details.
 
         :param family_id: Plugin family ID.
-        :raise NessusApiException:  When API error is encountered.
-        :return: An instance of :class:`nessus.api.models.PluginFamilyDetails`.
+        :raise TenableIOApiException:  When API error is encountered.
+        :return: An instance of :class:`tenable_io.api.models.PluginFamilyDetails`.
         """
         response = self._client.get('plugins/families/%(id)s', path_params={'id': family_id})
         return PluginFamilyDetails.from_json(response.text)
@@ -27,8 +27,8 @@ class PluginsApi(BaseApi):
         """Return plugin details.
 
         :param plugin_id: Plugin ID.
-        :raise NessusApiException:  When API error is encountered.
-        :return: An instance of :class:`nessus.api.models.PluginDetails`.
+        :raise TenableIOApiException:  When API error is encountered.
+        :return: An instance of :class:`tenable_io.api.models.PluginDetails`.
         """
         response = self._client.get('plugins/plugin/%(id)s', path_params={'id': plugin_id})
         return PluginDetails.from_json(response.text)

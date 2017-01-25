@@ -1,6 +1,4 @@
-import pytest
-
-from nessus.api.models import Plugin, PluginAttribute, PluginDetails, PluginFamily, PluginFamilyDetails, \
+from tenable_io.api.models import Plugin, PluginAttribute, PluginDetails, PluginFamily, PluginFamilyDetails, \
     PluginFamilyList
 
 from tests.base import BaseTest

@@ -1,7 +1,7 @@
 from json import loads
 
-from nessus.api.base import BaseApi, BaseRequest
-from nessus.api.models import Scanner, ScannerAwsTargetList, ScannerList, ScannerScanList
+from tenable_io.api.base import BaseApi, BaseRequest
+from tenable_io.api.models import Scanner, ScannerAwsTargetList, ScannerList, ScannerScanList
 
 
 class ScannersApi(BaseApi):
@@ -12,7 +12,7 @@ class ScannersApi(BaseApi):
         :param scanner_id: The scanner ID.
         :param scan_uuid: The scan UUID.
         :param control_scan: An instance of :class:`ScannerControlRequest`.
-        :raise NessusApiException:  When API error is encountered.
+        :raise TenableIOApiException:  When API error is encountered.
         :return: True if successful.
         """
         self._client.post('scanners/%(scanner_id)s/scans/%(scan_uuid)s/control',
@@ -24,7 +24,7 @@ class ScannersApi(BaseApi):
         """Deletes a scanner.
 
         :param scanner_id: The scanner ID.
-        :raise NessusApiException:  When API error is encountered.
+        :raise TenableIOApiException:  When API error is encountered.
         :return: True if successful.
         """
         self._client.delete('scanners/%(scanner_id)s', path_params={'scanner_id': scanner_id})
@@ -34,8 +34,8 @@ class ScannersApi(BaseApi):
         """Returns details of a given scanner.
 
         :param scanner_id: The scanner ID.
-        :raise NessusApiException:  When API error is encountered.
-        :return: An instance of :class:`nessus.api.models.Scanner`.
+        :raise TenableIOApiException:  When API error is encountered.
+        :return: An instance of :class:`tenable_io.api.models.Scanner`.
         """
         response = self._client.get('scanners/%(scanner_id)s', path_params={'scanner_id': scanner_id})
         return Scanner.from_json(response.text)
@@ -45,7 +45,7 @@ class ScannersApi(BaseApi):
 
         :param scanner_id: The scanner ID.
         :param scanner_edit: An instance of :class:`ScannerEditRequest`.
-        :raise NessusApiException:  When API error is encountered.
+        :raise TenableIOApiException:  When API error is encountered.
         :return: True if successful.
         """
         self._client.put('scanners/%(scanner_id)s', scanner_edit, path_params={'scanner_id': scanner_id})
@@ -55,8 +55,8 @@ class ScannersApi(BaseApi):
         """Returns list of AWS scan targets of an AWS scanner.
 
         :param scanner_id: The scanner ID.
-        :raise NessusApiException:  When API error is encountered.
-        :return: An instance of :class:`nessus.api.models.ScannerAwsTargetList`.
+        :raise TenableIOApiException:  When API error is encountered.
+        :return: An instance of :class:`tenable_io.api.models.ScannerAwsTargetList`.
         """
         response = self._client.get('scanners/%(scanner_id)s/aws-targets', path_params={'scanner_id': scanner_id})
         return ScannerAwsTargetList.from_json(response.text)
@@ -65,7 +65,7 @@ class ScannersApi(BaseApi):
         """Returns key of given scanner.
 
         :param scanner_id: The scanner ID.
-        :raise NessusApiException:  When API error is encountered.
+        :raise TenableIOApiException:  When API error is encountered.
         :return: Scanner key.
         """
         response = self._client.get('scanners/%(scanner_id)s/key', path_params={'scanner_id': scanner_id})
@@ -75,8 +75,8 @@ class ScannersApi(BaseApi):
         """Returns list of running scans on given scanner.
 
         :param scanner_id: The scanner ID.
-        :raise NessusApiException:  When API error is encountered.
-        :return: An instance of :class:`nessus.api.models.ScannerScanList`.
+        :raise TenableIOApiException:  When API error is encountered.
+        :return: An instance of :class:`tenable_io.api.models.ScannerScanList`.
         """
         response = self._client.get('scanners/%(scanner_id)s/scans', path_params={'scanner_id': scanner_id})
         return ScannerScanList.from_json(response.text)
@@ -84,8 +84,8 @@ class ScannersApi(BaseApi):
     def list(self):
         """Returns list of scanners.
 
-        :raise NessusApiException:  When API error is encountered.
-        :return: An instance of :class:`nessus.api.models.ScannerList`.
+        :raise TenableIOApiException:  When API error is encountered.
+        :return: An instance of :class:`tenable_io.api.models.ScannerList`.
         """
         response = self._client.get('scanners')
         return ScannerList.from_json(response.text)
@@ -95,7 +95,7 @@ class ScannersApi(BaseApi):
 
         :param scanner_id: The scanner ID.
         :param toggle_link: An instance of :class:`ScannerToggleRequest`.
-        :raise NessusApiException:  When API error is encountered.
+        :raise TenableIOApiException:  When API error is encountered.
         :return: True if successful.
         """
         self._client.put('scanners/%(scanner_id)s/link',

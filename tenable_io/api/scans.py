@@ -1,8 +1,8 @@
 from json import loads
 
-from nessus.api.base import BaseApi
-from nessus.api.models import Scan, ScanDetails, ScanList, ScanSettings
-from nessus.api.base import BaseRequest
+from tenable_io.api.base import BaseApi
+from tenable_io.api.models import Scan, ScanDetails, ScanList, ScanSettings
+from tenable_io.api.base import BaseRequest
 
 
 class ScansApi(BaseApi):
@@ -14,7 +14,7 @@ class ScansApi(BaseApi):
 
         :param scan_id:
         :param scan_configure: An instance of :class:`ScanConfigureRequest`.
-        :raise NessusApiException:  When API error is encountered.
+        :raise TenableIOApiException:  When API error is encountered.
         :return: The ID of scan just configured.
         """
         response = self._client.put('scans/%(scan_id)s', scan_configure, path_params={'scan_id': scan_id})
@@ -24,7 +24,7 @@ class ScansApi(BaseApi):
         """Create a scan.
 
         :param scan_create: An instance of :class:`ScanCreateRequest`.
-        :raise NessusApiException:  When API error is encountered.
+        :raise TenableIOApiException:  When API error is encountered.
         :return: The ID of scan just created.
         """
         response = self._client.post('scans', scan_create)
@@ -39,7 +39,7 @@ class ScansApi(BaseApi):
     def delete(self, scan_id):
         """Delete a scan. NOTE: Scans in running, paused or stopping states can not be deleted.
 
-        :raise NessusApiException:  When API error is encountered.
+        :raise TenableIOApiException:  When API error is encountered.
         :param scan_id: The scan ID.
         :return: True if successful.
         """
@@ -51,8 +51,8 @@ class ScansApi(BaseApi):
 
         :param scan_id: The scan ID.
         :param history_id: The historical data ID.
-        :raise NessusApiException:  When API error is encountered.
-        :return: An instance of :class:`nessus.api.models.ScanDetails`.
+        :raise TenableIOApiException:  When API error is encountered.
+        :return: An instance of :class:`tenable_io.api.models.ScanDetails`.
         """
         response = self._client.get('scans/%(scan_id)s',
                                     path_params={'scan_id': scan_id},
@@ -68,7 +68,7 @@ class ScansApi(BaseApi):
         :param stream: Default to True. If False, the response content will be immediately downloaded.
         :param chunk_size: If Stream=False, data is returned as a single chunk.\
          If Stream=True, it's the number of bytes it should read into memory.
-        :raise NessusApiException:  When API error is encountered.
+        :raise TenableIOApiException:  When API error is encountered.
         :return: The downloaded file.
         """
         response = self._client.get('scans/%(scan_id)s/export/%(file_id)s/download',
@@ -83,7 +83,7 @@ class ScansApi(BaseApi):
         :param scan_id: The scan ID.
         :param scan_export: An instance of :class:`ScanExportRequest`.
         :param history_id: The history ID of historical data.
-        :raise NessusApiException:  When API error is encountered.
+        :raise TenableIOApiException:  When API error is encountered.
         :return: The file ID.
         """
         assert isinstance(scan_export, ScanExportRequest)
@@ -100,7 +100,7 @@ class ScansApi(BaseApi):
 
         :param scan_id: The scan ID.
         :param file_id: The file ID.
-        :raise NessusApiException:  When API error is encountered.
+        :raise TenableIOApiException:  When API error is encountered.
         :return: The file status.
         """
         response = self._client.get('scans/%(scan_id)s/export/%(file_id)s/status',
@@ -112,7 +112,7 @@ class ScansApi(BaseApi):
 
         :param scan_id: The scan ID.
         :param folder_id: The folder ID.
-        :raise NessusApiException:  When API error is encountered.
+        :raise TenableIOApiException:  When API error is encountered.
         :return: True if successful.
         """
         self._client.put('scans/%(scan_id)s/folder',
@@ -121,10 +121,10 @@ class ScansApi(BaseApi):
         return True
 
     def import_scan(self, scan_import):
-        """Import an existing scan which has been uploaded using :func:`Nessus.FileApi.upload`
+        """Import an existing scan which has been uploaded using :func:`TenableIO.FileApi.upload`
 
         :param scan_import: An instance of :class:`ScanImportRequest`.
-        :raise NessusApiException:  When API error is encountered.
+        :raise TenableIOApiException:  When API error is encountered.
         :return: The ID of the imported scan.
         """
         response = self._client.post('scans/import', scan_import)
@@ -135,7 +135,7 @@ class ScansApi(BaseApi):
 
         :param scan_id: The scan ID.
         :param scan_launch_request: An instance of :class:`ScanLaunchRequest`.
-        :raise NessusApiException:  When API error is encountered.
+        :raise TenableIOApiException:  When API error is encountered.
         :return: The scan uuid.
         """
         assert isinstance(scan_launch_request, ScanLaunchRequest)
@@ -147,8 +147,8 @@ class ScansApi(BaseApi):
     def list(self, folder_id=None):
         """Return the scan list.
 
-        :raise NessusApiException:  When API error is encountered.
-        :return: An instance of :class:`nessus.api.models.ScanList`.
+        :raise TenableIOApiException:  When API error is encountered.
+        :return: An instance of :class:`tenable_io.api.models.ScanList`.
         """
         response = self._client.get('scans', params={'folder_id': folder_id} if folder_id else {})
         return ScanList.from_json(response.text)
@@ -157,7 +157,7 @@ class ScansApi(BaseApi):
         """Pause a scan.
 
         :param scan_id: The scan ID.
-        :raise NessusApiException:  When API error is encountered.
+        :raise TenableIOApiException:  When API error is encountered.
         :return: True if successful.
         """
         self._client.post('scans/%(scan_id)s/pause', {}, path_params={'scan_id': scan_id})
@@ -167,7 +167,7 @@ class ScansApi(BaseApi):
         """Resume a scan.
 
         :param scan_id: The scan ID.
-        :raise NessusApiException:  When API error is encountered.
+        :raise TenableIOApiException:  When API error is encountered.
         :return: True if successful.
         """
         self._client.post('scans/%(scan_id)s/resume', {}, path_params={'scan_id': scan_id})
@@ -177,7 +177,7 @@ class ScansApi(BaseApi):
         """Stop a scan.
 
         :param scan_id: The scan ID.
-        :raise NessusApiException:  When API error is encountered.
+        :raise TenableIOApiException:  When API error is encountered.
         :return: True if successful.
         """
         self._client.post('scans/%(scan_id)s/stop', {}, path_params={'scan_id': scan_id})

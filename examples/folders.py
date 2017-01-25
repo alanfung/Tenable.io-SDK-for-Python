@@ -1,6 +1,6 @@
-from nessus.api.models import Folder
-from nessus.client import NessusClient
-from nessus.exceptions import NessusApiException
+from tenable_io.api.models import Folder
+from tenable_io.client import TenableIOClient
+from tenable_io.exceptions import TenableIOApiException
 
 
 def example(test_name):
@@ -10,9 +10,9 @@ def example(test_name):
     folder_name = test_name(u'my test folder', length=5)
 
     '''
-    Instantiate an instance of the NessusClient.
+    Instantiate an instance of the TenableIOClient.
     '''
-    client = NessusClient()
+    client = TenableIOClient()
 
     '''
     Create a folder.
@@ -82,5 +82,5 @@ def example(test_name):
     try:
         scan.details()
         assert False
-    except NessusApiException:
+    except TenableIOApiException:
         pass

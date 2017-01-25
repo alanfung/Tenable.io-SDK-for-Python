@@ -1,8 +1,8 @@
 import os
 
-from nessus.api.models import Template
-from nessus.api.policies import PolicyCreateRequest, PolicyImportRequest, PolicySettings
-from nessus.exceptions import NessusException
+from tenable_io.api.models import Template
+from tenable_io.api.policies import PolicyCreateRequest, PolicyImportRequest, PolicySettings
+from tenable_io.exceptions import TenableIOException
 
 
 class PolicyHelper(object):
@@ -11,8 +11,8 @@ class PolicyHelper(object):
         self._client = client
 
     def create(self, name, template):
-        """
-        Create a policy.
+        """Create a policy.
+
         :param name: The name of the policy.
         :param template: The name or title of the template, or an instance of Template.
         :return: PolicyRef referenced by id if exists.
@@ -26,7 +26,7 @@ class PolicyHelper(object):
             t = self.template(title=template)
 
         if not t:
-            raise NessusException(u'Template with name or title as "%s" not found.' % template)
+            raise TenableIOException(u'Template with name or title as "%s" not found.' % template)
 
         policy_id = self._client.policies_api.create(
             PolicyCreateRequest(
@@ -37,13 +37,13 @@ class PolicyHelper(object):
         return PolicyRef(self._client, policy_id)
 
     def import_policy(self, path):
-        """
-        Upload and import the policy file.
+        """Upload and import the policy file.
+
         :param path: Path of the policy file.
         :return: PolicyRef referenced by id if exists.
         """
         if not os.path.isfile(path):
-            raise NessusException(u'File does not exist')
+            raise TenableIOException(u'File does not exist')
 
         with open(path, 'rb') as upload_file:
             uploaded_file_name = self._client.file_api.upload(upload_file)
@@ -55,8 +55,8 @@ class PolicyHelper(object):
         return PolicyRef(self._client, policy_id)
 
     def template(self, name=None, title=None):
-        """
-        Get template by name or title. The 'title' argument is ignored if 'name is passed.
+        """Get template by name or title. The 'title' argument is ignored if 'name is passed.
+
         :param name: The name of the template.
         :param title: The title of the template.
         :return: An instance of Template if exists, otherwise None.
@@ -87,31 +87,31 @@ class PolicyRef(object):
         self.id = id
 
     def copy(self):
-        """
-        Create a copy of the policy.
+        """Create a copy of the policy.
+
         :return: An instance of PolicyRef that references the newly copied policy.
         """
         policy_id = self._client.policies_api.copy(self.id)
         return PolicyRef(self._client, policy_id)
 
     def delete(self):
-        """
-        Delete the policy.
+        """Delete the policy.
+
         :return: The same PolicyRef Instance.
         """
         self._client.policies_api.delete(self.id)
         return self
 
     def details(self):
-        """
-        Get the policy detail.
-        :return: An instance of :class:`nessus.api.models.PolicyDetails`.
+        """Get the policy detail.
+
+        :return: An instance of :class:`tenable_io.api.models.PolicyDetails`.
         """
         return self._client.policies_api.details(self.id)
 
     def download(self, path, file_open_mode='wb'):
-        """
-        Download a policy file.
+        """Download a policy file.
+
         :param path: The file path to save the file.
         :param file_open_mode: The open mode to the file output. Default to 'wb'.
         :return: The same PolicyRef instance.
@@ -123,8 +123,8 @@ class PolicyRef(object):
         return self
 
     def name(self):
-        """
-        Get the name of the policy.
+        """Get the name of the policy.
+
         :return:  The name.
         """
         return self.details().settings.name

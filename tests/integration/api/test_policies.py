@@ -1,11 +1,11 @@
 import pytest
 import os
 
-from nessus.api.models import Policy, PolicyDetails, PolicyList, PolicySettings
-from nessus.api.policies import PolicyCreateRequest, PolicyConfigureRequest, PolicyImportRequest
+from tenable_io.api.models import Policy, PolicyDetails, PolicyList, PolicySettings
+from tenable_io.api.policies import PolicyCreateRequest, PolicyConfigureRequest, PolicyImportRequest
 
 from tests.base import BaseTest
-from tests.config import NessusTestConfig
+from tests.config import TenableIOTestConfig
 
 
 class TestPoliciesApi(BaseTest):
@@ -18,7 +18,8 @@ class TestPoliciesApi(BaseTest):
         template_list = client.editor_api.list('policy')
         assert len(template_list.templates) > 0, u'At least one policy template.'
 
-        test_templates = [t for t in template_list.templates if t.name == NessusTestConfig.get('policy_template_name')]
+        test_templates = [t for t in template_list.templates
+                          if t.name == TenableIOTestConfig.get('policy_template_name')]
         assert len(test_templates) > 0, u'At least one test template.'
 
         yield test_templates[0]

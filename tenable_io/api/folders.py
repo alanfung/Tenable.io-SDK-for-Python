@@ -1,7 +1,7 @@
 from json import loads
 
-from nessus.api.base import BaseApi
-from nessus.api.models import Folder, FolderList
+from tenable_io.api.base import BaseApi
+from tenable_io.api.models import FolderList
 
 
 class FoldersApi(BaseApi):
@@ -10,7 +10,7 @@ class FoldersApi(BaseApi):
         """Create a new folder for the current user.
 
         :param name: The folder name.
-        :raise NessusApiException:  When API error is encountered.
+        :raise TenableIOApiException:  When API error is encountered.
         :return: The ID of the folder created.
         """
         response = self._client.post('folders', {'name': name})
@@ -21,7 +21,7 @@ class FoldersApi(BaseApi):
 
         :param folder_id: The folder ID.
         :param name: The folder name to be renamed.
-        :raise NessusApiException:  When API error is encountered.
+        :raise TenableIOApiException:  When API error is encountered.
         :return: True if successful.
         """
         self._client.put('folders/%(folder_id)s', {'name': name}, {'folder_id': folder_id})
@@ -31,7 +31,7 @@ class FoldersApi(BaseApi):
         """Delete the folder.
 
         :param folder_id: The folder ID.
-        :raise NessusApiException:  When API error is encountered.
+        :raise TenableIOApiException:  When API error is encountered.
         :return: True if successful.
         """
         self._client.delete('folders/%(folder_id)s', {'folder_id': folder_id})
@@ -40,8 +40,8 @@ class FoldersApi(BaseApi):
     def list(self):
         """Returns the current user's scan folders.
 
-        :raise NessusApiException:  When API error is encountered.
-        :return: An instance of :class"`nessus.api.models.FolderList`.
+        :raise TenableIOApiException:  When API error is encountered.
+        :return: An instance of :class"`tenable_io.api.models.FolderList`.
         """
         response = self._client.get('folders')
         return FolderList.from_json(response.text)

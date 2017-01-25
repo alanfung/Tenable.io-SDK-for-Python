@@ -1,34 +1,34 @@
-Nessus Python SDK
+Tenable.io Python SDK
 =================
 
-Nessus Python SDK
+Tenable.io Python SDK
 
 Configuration
 ~~~~~~~~~~~~~
 
 Access key and secret key are needed to authenticate with the [Tenable
-Cloud API]. There are three ways to configure the ``NessusClient`` with
+Cloud API]. There are three ways to configure the ``TenableIOClient`` with
 the keys.
 
 INI File
 ''''''''
 
-| A ``nessus.ini`` can be created in the working directory. See
-  ``nessus.ini.example`` on what it should look like.
-| Note: The ``nessus.ini.example`` file is in Jinja template format.
+| A ``tenable_io.ini`` can be created in the working directory. See
+  ``tenable_io.ini.example`` on what it should look like.
+| Note: The ``tenable_io.ini.example`` file is in Jinja template format.
 
-``NessusClient`` Constructor Arguments
+``TenableIOClient`` Constructor Arguments
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code:: python
 
-    NessusClient(access_key='YOUR_ACCESS_KEY', secret_key='YOUR_SECRET_KEY')
+    TenableIOClient(access_key='YOUR_ACCESS_KEY', secret_key='YOUR_SECRET_KEY')
 
 Environment Variables
 ^^^^^^^^^^^^^^^^^^^^^
 
-NessusClient looks for the environment variables ``NESSUS_ACCESS_KEY``
-and ``NESSUS_SECRET_KEY``.
+TenableIOClient looks for the environment variables ``TENABLEIO_ACCESS_KEY``
+and ``TENABLEIO_SECRET_KEY``.
 
 Python Version
 ~~~~~~~~~~~~~~
@@ -69,7 +69,7 @@ To generate/force update the RST documentations from docstrings.
 
 .. code:: sh
 
-    $ sphinx-apidoc -f -o doc/source nessus
+    $ sphinx-apidoc -f -o doc/source tenable_io
 
 Generate HTML documentation.
 

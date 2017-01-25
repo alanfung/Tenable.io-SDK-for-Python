@@ -1,7 +1,7 @@
 from json import loads
 
-from nessus.api.base import BaseApi, BaseRequest
-from nessus.api.models import User, UserKeys, UserList
+from tenable_io.api.base import BaseApi, BaseRequest
+from tenable_io.api.models import User, UserKeys, UserList
 
 
 class UsersApi(BaseApi):
@@ -13,7 +13,7 @@ class UsersApi(BaseApi):
     def list(self):
         """Return the user list.
 
-        :return: An instance of :class:`nessus.api.models.UserList`.
+        :return: An instance of :class:`tenable_io.api.models.UserList`.
         """
         response = self._client.get('users')
         return UserList.from_json(response.text)
@@ -26,7 +26,7 @@ class UsersApi(BaseApi):
         """Create a new user.
 
         :param user_create: An instance of :class:`UserCreateRequest`.
-        :raise NessusApiException:  When API error is encountered.
+        :raise TenableIOApiException:  When API error is encountered.
         :return: The ID of the created user.
         """
         response = self._client.post('users', user_create)
@@ -37,8 +37,8 @@ class UsersApi(BaseApi):
 
         :param user_id: The user ID.
         :param user_edit: An instance of :class:`UserEditRequest`.
-        :raise NessusApiException:  When API error is encountered.
-        :return: An instance of :class:`nessus.api.models.User`.
+        :raise TenableIOApiException:  When API error is encountered.
+        :return: An instance of :class:`tenable_io.api.models.User`.
         """
         response = self._client.put('users/%(user_id)s', user_edit, {'user_id': user_id})
         return User.from_json(response.text)
@@ -47,7 +47,7 @@ class UsersApi(BaseApi):
         """Delete a user.
 
         :param user_id: The user ID.
-        :raise NessusApiException:  When API error is encountered.
+        :raise TenableIOApiException:  When API error is encountered.
         :return: True if successful.
         """
         self._client.delete('users/%(user_id)s', {'user_id': user_id})
@@ -58,7 +58,7 @@ class UsersApi(BaseApi):
 
         :param user_id: The user ID.
         :param password: Current password for the user.
-        :raise NessusApiException:  When API error is encountered.
+        :raise TenableIOApiException:  When API error is encountered.
         :return: True if successful.
         """
         self._client.put('users/%(user_id)s/chpasswd', {'password': password}, {'user_id': user_id})
@@ -68,8 +68,8 @@ class UsersApi(BaseApi):
         """Return details for the given user.
 
         :param user_id: The user ID.
-        :raise NessusApiException:  When API error is encountered.
-        :return: An instance of :class:`nessus.api.models.User`
+        :raise TenableIOApiException:  When API error is encountered.
+        :return: An instance of :class:`tenable_io.api.models.User`
         """
         response = self._client.get('users/%(user_id)s', {'user_id': user_id})
         return User.from_json(response.text)
@@ -78,8 +78,8 @@ class UsersApi(BaseApi):
         """Generate the API Keys for the given user.
 
         :param user_id: The user ID.
-        :raise NessusApiException:  When API error is encountered.
-        :return: An instance of :class:`nessus.api.models.UserKeys`
+        :raise TenableIOApiException:  When API error is encountered.
+        :return: An instance of :class:`tenable_io.api.models.UserKeys`
         """
         response = self._client.put('users/%(user_id)s/keys', path_params={'user_id': user_id})
         return UserKeys.from_json(response.text)
@@ -89,7 +89,7 @@ class UsersApi(BaseApi):
 
         :param user_id: The user ID.
         :param enabled: True to enable. False to Disable.
-        :raise NessusApiException:  When API error is encountered.
+        :raise TenableIOApiException:  When API error is encountered.
         :return: True if successful.
         """
         self._client.put('users/%(user_id)s/enabled', {'enabled': enabled}, {'user_id': user_id})

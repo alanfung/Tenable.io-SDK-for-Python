@@ -1,7 +1,7 @@
 import pytest
 import six
 
-from nessus.client import NessusClient, NessusApiException, NessusRetryableApiException
+from tenable_io.client import TenableIOClient, TenableIOApiException, TenableIORetryableApiException
 from tests.base import BaseTest
 
 if six.PY34:
@@ -10,18 +10,18 @@ else:
     import mock
 
 
-class TestNessusClient(BaseTest):
+class TestTenableIOClient(BaseTest):
 
     def test_client_retries(self):
 
-        # Function that throws NessusRetryableException
+        # Function that throws TenableIORetryableException
         mock_response = mock.Mock()
-        foo = mock.Mock(side_effect=NessusRetryableApiException(mock_response))
+        foo = mock.Mock(side_effect=TenableIORetryableApiException(mock_response))
 
         # Function decoration
-        retried_foo = NessusClient._retry(foo)
+        retried_foo = TenableIOClient._retry(foo)
 
-        with pytest.raises(NessusApiException):
+        with pytest.raises(TenableIOApiException):
             retried_foo()
 
         assert foo.call_count == 4, u'Should be tried 4 times (retried 3 times).'
@@ -40,14 +40,14 @@ class TestNessusClient(BaseTest):
         foo = mock.Mock(side_effect=[mock.Mock(**response[0]) for response in responses])
 
         # Method decoration
-        foo = NessusClient._error_handler(foo)
+        foo = TenableIOClient._error_handler(foo)
 
         for (response, retry) in responses:
             if retry:
-                with pytest.raises(NessusRetryableApiException):
+                with pytest.raises(TenableIORetryableApiException):
                     foo()
             else:
                 try:
                     foo()
-                except NessusRetryableApiException:
+                except TenableIORetryableApiException:
                     assert False, u'Response %s should not be retry-able.' % response

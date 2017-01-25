@@ -1,19 +1,19 @@
 import os
 
-from nessus.client import NessusClient
-from nessus.exceptions import NessusApiException
+from tenable_io.client import TenableIOClient
+from tenable_io.exceptions import TenableIOApiException
 
 
 def example(test_name, test_file):
 
     # Generate unique file.
     policy_name = test_name(u'my test policy')
-    test_file_output = test_file(u'my_exported_policy.nessus')
+    test_file_output = test_file(u'my_exported_policy.tenable_io')
 
     '''
-    Instantiate an instance of the NessusClient.
+    Instantiate an instance of the TenableIOClient.
     '''
-    client = NessusClient()
+    client = TenableIOClient()
 
     '''
     Create a policy.
@@ -51,10 +51,10 @@ def example(test_name, test_file):
     try:
         policy.details()
         assert False
-    except NessusApiException:
+    except TenableIOApiException:
         pass
     try:
         policy_copy.details()
         assert False
-    except NessusApiException:
+    except TenableIOApiException:
         pass

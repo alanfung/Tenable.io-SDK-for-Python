@@ -1,5 +1,5 @@
-from nessus.api.base import BaseApi
-from nessus.api.models import TemplateList
+from tenable_io.api.base import BaseApi
+from tenable_io.api.models import TemplateList
 
 
 class EditorApi(BaseApi):
@@ -8,8 +8,8 @@ class EditorApi(BaseApi):
         """Returns the template list.
 
         :param type: The type of template (scan or policy).
-        :raise NessusApiException:  When API error is encountered.
-        :return: An instance of :class:`nessus.api.models.TemplateList`.
+        :raise TenableIOApiException:  When API error is encountered.
+        :return: An instance of :class:`tenable_io.api.models.TemplateList`.
         """
         response = self._client.get('editor/%(type)s/templates', path_params={'type': type})
         return TemplateList.from_json(response.text)

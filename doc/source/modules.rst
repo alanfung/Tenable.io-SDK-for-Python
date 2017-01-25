@@ -1,7 +1,7 @@
-nessus
-======
+tenable_io
+==========
 
 .. toctree::
    :maxdepth: 4
 
-   nessus
+   tenable_io

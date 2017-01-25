@@ -2,7 +2,7 @@ import os
 import pytest
 
 from tests.base import BaseTest
-from tests.config import NessusTestConfig
+from tests.config import TenableIOTestConfig
 
 
 class TestPolicyHelper(BaseTest):
@@ -14,7 +14,7 @@ class TestPolicyHelper(BaseTest):
         """
         policy = client.policy_helper.create(
             app.session_name('test_policy'),
-            NessusTestConfig.get('policy_template_name'))
+            TenableIOTestConfig.get('policy_template_name'))
         yield policy
         policy.delete()
 

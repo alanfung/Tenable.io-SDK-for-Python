@@ -1,5 +1,5 @@
-from nessus.api.base import BaseApi
-from nessus.api.models import Group, GroupList, UserList
+from tenable_io.api.base import BaseApi
+from tenable_io.api.models import Group, GroupList, UserList
 
 
 class GroupsApi(BaseApi):
@@ -9,7 +9,7 @@ class GroupsApi(BaseApi):
 
         :param group_id: The group ID.
         :param user_id: The user ID.
-        :raise NessusApiException:  When API error is encountered.
+        :raise TenableIOApiException:  When API error is encountered.
         :return: True if successful.
         """
         self._client.post('groups/%(group_id)s/users/%(user_id)s', {},
@@ -20,8 +20,8 @@ class GroupsApi(BaseApi):
         """Create a group.
 
         :param name: The group name.
-        :raise NessusApiException:  When API error is encountered.
-        :return: An instance of :class:`nessus.api.models.Group`.
+        :raise TenableIOApiException:  When API error is encountered.
+        :return: An instance of :class:`tenable_io.api.models.Group`.
         """
         response = self._client.post('groups', {'name': name})
         return Group.from_json(response.text)
@@ -30,7 +30,7 @@ class GroupsApi(BaseApi):
         """Delete a group.
 
         :param group_id: The group ID.
-        :raise NessusApiException:  When API error is encountered.
+        :raise TenableIOApiException:  When API error is encountered.
         :return: True if successful.
         """
         self._client.delete('groups/%(group_id)s', {'group_id': group_id})
@@ -41,7 +41,7 @@ class GroupsApi(BaseApi):
 
         :param group_id: The group ID.
         :param user_id: The user ID.
-        :raise NessusApiException:  When API error is encountered.
+        :raise TenableIOApiException:  When API error is encountered.
         :return: True if successful.
         """
         self._client.delete('groups/%(group_id)s/users/%(user_id)s', {'group_id': group_id, 'user_id': user_id})
@@ -60,8 +60,8 @@ class GroupsApi(BaseApi):
     def list(self):
         """Return the group list.
 
-        :raise NessusApiException:  When API error is encountered.
-        :return: An instance of :class:`nessus.api.models.Grouplist`.
+        :raise TenableIOApiException:  When API error is encountered.
+        :return: An instance of :class:`tenable_io.api.models.Grouplist`.
         """
         response = self._client.get('groups')
         return GroupList.from_json(response.text)
@@ -70,7 +70,7 @@ class GroupsApi(BaseApi):
         """Return the user list in the group.
 
         :param group_id: The group ID.
-        :return: An instance of :class:`nessus.api.models.UserList`.
+        :return: An instance of :class:`tenable_io.api.models.UserList`.
         """
         response = self._client.get('groups/%(group_id)s/users', {'group_id': group_id})
         return UserList.from_json(response.text)

@@ -1,12 +1,12 @@
 import pytest
 
-from nessus.exceptions import NessusApiException
-from nessus.api.models import Scan, ScanSettings, Scanner, ScannerList, ScannerScanList
-from nessus.api.scanners import ScannerControlRequest, ScannerEditRequest
-from nessus.api.scans import ScanCreateRequest, ScanLaunchRequest
+from tenable_io.exceptions import TenableIOApiException
+from tenable_io.api.models import Scan, ScanSettings, Scanner, ScannerList, ScannerScanList
+from tenable_io.api.scanners import ScannerControlRequest, ScannerEditRequest
+from tenable_io.api.scans import ScanCreateRequest, ScanLaunchRequest
 
 from tests.base import BaseTest
-from tests.config import NessusTestConfig
+from tests.config import TenableIOTestConfig
 
 
 class TestScannersApi(BaseTest):
@@ -29,7 +29,7 @@ class TestScannersApi(BaseTest):
         template_list = client.editor_api.list('scan')
         assert len(template_list.templates) > 0, u'At least one scan template.'
 
-        test_templates = [t for t in template_list.templates if t.name == NessusTestConfig.get('scan_template_name')]
+        test_templates = [t for t in template_list.templates if t.name == TenableIOTestConfig.get('scan_template_name')]
         assert len(test_templates) > 0, u'At least one test template.'
 
         yield test_templates[0]
@@ -44,7 +44,7 @@ class TestScannersApi(BaseTest):
                 template.uuid,
                 ScanSettings(
                     app.session_name('test_scanners'),
-                    NessusTestConfig.get('scan_text_targets'),
+                    TenableIOTestConfig.get('scan_text_targets'),
                     scanner_id=scanner.id
                 )
             )
@@ -70,7 +70,7 @@ class TestScannersApi(BaseTest):
 
         try:
             client.scans_api.delete(scan_id)
-        except NessusApiException:
+        except TenableIOApiException:
             # This happens when the scan is not idling.
             client.scans_api.stop(scan_id)
             self.wait_until(lambda: client.scans_api.details(scan_id),
@@ -105,7 +105,7 @@ class TestScannersApi(BaseTest):
         assert isinstance(scanner_details, Scanner), u'Get request returns type.'
 
     def test_edit(self, client, scanner):
-        with pytest.raises(NessusApiException) as e:
+        with pytest.raises(TenableIOApiException) as e:
             client.scanners_api.edit(scanner.id, ScannerEditRequest())
         assert e.value.response.status_code != 404, u'Request cannot return with 404.'
 
@@ -119,6 +119,6 @@ class TestScannersApi(BaseTest):
         assert len(scanners.scanners) > 0, u'Must contain at least one scanner.'
 
     def test_toggle_link_state(self, client, scanner):
-        with pytest.raises(NessusApiException) as e:
+        with pytest.raises(TenableIOApiException) as e:
             client.scanners_api.toggle_link_state(scanner.id, None)
         assert e.value.response.status_code != 404, u'Request cannot return with 404.'

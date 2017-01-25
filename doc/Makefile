@@ -4,7 +4,7 @@
 # You can set these variables from the command line.
 SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
-SPHINXPROJ    = TenableNessusSDK
+SPHINXPROJ    = TenableioSDK
 SOURCEDIR     = source
 BUILDDIR      = build
 
