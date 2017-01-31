@@ -1,7 +1,7 @@
-Tenable.io Python SDK
+Tenable.io SDK for Python
 =================
 
-Tenable.io Python SDK
+Tenable.io SDK for Python
 
 Configuration
 ~~~~~~~~~~~~~
