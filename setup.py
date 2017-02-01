@@ -11,7 +11,7 @@ setup(
     version='0.0',
     description='Tenable.io API SDK',
     long_description=long_description,
-    author='Code Particle',
+    author='Tenable Network Security, Inc',
     packages=find_packages(exclude=['doc', 'tests*']),
     install_requires=[
         "mock==2.0.0",

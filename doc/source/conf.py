@@ -47,7 +47,7 @@ master_doc = 'index'
 # General information about the project.
 project = u'Tenable.io SDK'
 copyright = u'Tenable Network Security, Inc.'
-author = u'Code Particle'
+author = u'Tenable Network Security, Inc'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -127,7 +127,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'TenableioSDK.tex', u'Tenable.io SDK Documentation',
-     u'Code Particle', 'manual'),
+     u'Tenable Network Security, Inc', 'manual'),
 ]
 
 
