@@ -46,7 +46,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Tenable.io SDK'
-copyright = u'2017, Code Particle'
+copyright = u'Tenable Network Security, Inc.'
 author = u'Code Particle'
 
 # The version info for the project you're documenting, acts as replacement for
